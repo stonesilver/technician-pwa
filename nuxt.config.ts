@@ -5,12 +5,19 @@ export default defineNuxtConfig({
   ssr: false,
   devServer: {
     port: 5177,
-    https: {
-      key: "./localhost+2-key.pem",
-      cert: "./localhost+2.pem",
-    },
+    // https: {
+    //   key: "./localhost+2-key.pem",
+    //   cert: "./localhost+2.pem",
+    // },
   },
-  modules: ["@vite-pwa/nuxt", "@nuxt/image", "@nuxtjs/tailwindcss", "shadcn-nuxt", "@vee-validate/nuxt"],
+  modules: [
+    "@vite-pwa/nuxt",
+    "@nuxt/image",
+    "@nuxtjs/tailwindcss",
+    "shadcn-nuxt",
+    "@vee-validate/nuxt",
+    "@nuxtjs/ngrok",
+  ],
   veeValidate: {
     // disable or enable auto imports
     autoImports: true,
@@ -37,7 +44,7 @@ export default defineNuxtConfig({
     srcDir: "./service-worker",
     filename: "sw.ts",
     manifest: {
-      id: "/?v=1.0.0",
+      id: "/?v=1.0.1",
       name: "MCA-Technician-App",
       short_name: "MTA",
       description: "Technicians auto parts reporting",
@@ -96,15 +103,21 @@ export default defineNuxtConfig({
       ],
       screenshots: [
         {
-          src: "app-icons/app-icons-512x512.png",
+          src: "app-icons/screenshot-home.webp",
           sizes: "512x512",
-          type: "image/png",
+          type: "image/webp",
           form_factor: "wide",
         },
         {
-          src: "app-icons/app-icons-512x512.png",
+          src: "app-icons/wallet-home.webp",
           sizes: "512x512",
-          type: "image/png",
+          type: "image/webp",
+          form_factor: "narrow",
+        },
+        {
+          src: "app-icons/dashboard-home.webp",
+          sizes: "512x512",
+          type: "image/webp",
           form_factor: "narrow",
         },
       ],
@@ -138,4 +151,18 @@ export default defineNuxtConfig({
     },
   },
   experimental: { appManifest: true },
+  ngrok: {
+    authtoken: process.env.NGROK_AUTH_TOKEN,
+    addr: 5177,
+  },
+  vite: {
+    server: {
+      allowedHosts: [
+        "localhost",
+        "127.0.0.1",
+        "25e6-102-89-42-103.ngrok-free.app", // Add your Ngrok domain here
+        "*",
+      ],
+    },
+  },
 })

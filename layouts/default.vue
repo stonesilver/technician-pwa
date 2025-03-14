@@ -4,12 +4,11 @@ const nuxtApp = useNuxtApp()
 
 onMounted(async () => {
   // useNuxtApp().$pwa?.install();
-
-  if (!nuxtApp.$pwa?.isPWAInstalled) {
-    console.log("i ran!!!")
-    await nuxtApp.$pwa?.install()
-    console.log(nuxtApp.$pwa)
-  }
+  // if (!nuxtApp.$pwa?.isPWAInstalled) {
+  //   console.log("i ran!!!")
+  //   await nuxtApp.$pwa?.install()
+  //   console.log(nuxtApp.$pwa)
+  // }
 })
 </script>
 
