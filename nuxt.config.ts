@@ -34,7 +34,7 @@ export default defineNuxtConfig({
   pwa: {
     registerType: "autoUpdate", // "prompt", //
     strategies: "injectManifest",
-    srcDir: "service-worker",
+    srcDir: "./service-worker",
     filename: "sw.ts",
     manifest: {
       id: "/?v=1.0.0",
