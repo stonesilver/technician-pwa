@@ -34,8 +34,8 @@ export default defineNuxtConfig({
   pwa: {
     registerType: "autoUpdate", // "prompt", //
     strategies: "injectManifest",
-    // srcDir: "service-worker",
-    // filename: "sw.ts",
+    srcDir: "service-worker",
+    filename: "sw.ts",
     manifest: {
       id: "/?v=1.0.0",
       name: "MCA-Technician-App",
@@ -112,8 +112,8 @@ export default defineNuxtConfig({
       display: "standalone",
       background_color: "#ffffff",
       prefer_related_applications: true,
-      // lang: "en",
-      // orientation: "portrait",
+      lang: "en",
+      orientation: "portrait",
     },
     workbox: {
       cleanupOutdatedCaches: true,
@@ -127,7 +127,7 @@ export default defineNuxtConfig({
       installPrompt: true,
       // you don't need to include this: only for testing purposes
       // if enabling periodic sync for update use 1 hour or so (periodicSyncForUpdates: 3600)
-      periodicSyncForUpdates: 3600,
+      periodicSyncForUpdates: 20,
     },
     devOptions: {
       enabled: true,
@@ -137,5 +137,5 @@ export default defineNuxtConfig({
       suppressWarnings: true,
     },
   },
-  // experimental: { appManifest: true },
+  experimental: { appManifest: true },
 })
