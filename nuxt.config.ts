@@ -34,8 +34,8 @@ export default defineNuxtConfig({
   pwa: {
     registerType: "autoUpdate", // "prompt", //
     strategies: "injectManifest",
-    srcDir: "service-worker",
-    filename: "sw.ts",
+    // srcDir: "service-worker",
+    // filename: "sw.ts",
     manifest: {
       id: "/?v=1.0.0",
       name: "MCA-Technician-App",
