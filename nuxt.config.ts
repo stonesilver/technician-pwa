@@ -122,7 +122,7 @@ export default defineNuxtConfig({
           form_factor: "narrow",
         },
       ],
-      scope: process.env.VITE_API_DOMAIN || "/",
+      scope: process.env.VITE_BASE_DOMAIN || "/",
       start_url: "/",
       display: "standalone",
       background_color: "#ffffff",

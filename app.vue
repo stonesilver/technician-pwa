@@ -40,7 +40,7 @@ onMounted(() => {
  showModal.value = false
   // Clear the deferredPrompt so it can be garbage collected
     deferredPrompt.value = null;
-  window.location.href = import.meta.env.VITE_API_DOMAIN || '/'
+  window.location.href = import.meta.env.VITE_BASE_DOMAIN || '/'
   // Optionally, send analytics event to indicate successful install
   console.log('PWA was installed');
 });
