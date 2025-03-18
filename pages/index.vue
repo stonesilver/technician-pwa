@@ -5,8 +5,6 @@ import { type SubmissionHandler } from "vee-validate"
 
 definePageMeta({ layout: "auth" })
 
-const passwordIsVisible = ref(false)
-
 const handleLogin: SubmissionHandler<LoginPayload, any> = async (values: LoginPayload) => {
   console.log(values)
 
@@ -33,27 +31,18 @@ const handleLogin: SubmissionHandler<LoginPayload, any> = async (values: LoginPa
       >
         <div class="flex-1 flex flex-col justify-center space-y-6">
           <shared-form-field name="phone_number" label="Phone number" v-slot="{ field }">
-            <Input type="tel" inputmode="numeric" placeholder="Enter  phone number" autocomplete="off" v-bind="field" />
+            <Input
+              type="tel"
+              inputmode="numeric"
+              placeholder="Enter  phone number"
+              maxlength="11"
+              autocomplete="off"
+              v-bind="field"
+            />
           </shared-form-field>
 
           <shared-form-field name="password" label="Password" v-slot="{ field }">
-            <div class="relative flex items-center w-full">
-              <Input
-                :type="passwordIsVisible ? 'text' : 'password'"
-                placeholder="Enter password"
-                autocomplete="off"
-                class="pr-10"
-                v-bind="field"
-              >
-                <template #append>
-                  <shared-icon
-                    :name="passwordIsVisible ? 'eye' : 'eye-slash'"
-                    class="cursor-pointer"
-                    @click="passwordIsVisible = !passwordIsVisible"
-                  />
-                </template>
-              </Input>
-            </div>
+            <shared-password-input :field="field" />
           </shared-form-field>
         </div>
 

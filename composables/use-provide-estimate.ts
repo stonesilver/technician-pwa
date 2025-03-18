@@ -1,6 +1,7 @@
 import type { ProvideEstimateSchemaContext } from "~/utils/yup-schemas"
 import type { SubmissionHandler } from "vee-validate"
 import { dummyDamages } from "~/components/provide-estimate/constants.provide-estimate"
+import { currencyToNumber } from "~/utils/helper-functions/return-number"
 
 export const useProvideEstimate = () => {
   const wrapperRef = ref<HTMLDivElement | null>(null)
@@ -10,7 +11,13 @@ export const useProvideEstimate = () => {
   const observer = ref<IntersectionObserver>()
   const damages = ref(dummyDamages)
   const selectedPart = ref<(typeof damages.value)[0] | undefined>()
-  const modals = reactive({ success: false, estimate: false, doLater: false, sessionExpired: false })
+  const modals = reactive({
+    success: false,
+    provideEstimate: false,
+    doLater: false,
+    sessionExpired: false,
+    estimateSubmitted: false,
+  })
   const submittedEstimates = reactive<Record<number, ProvideEstimateSchemaContext>>({})
   const { isDownloading, download } = useDownloadFile()
 
@@ -24,7 +31,7 @@ export const useProvideEstimate = () => {
 
   const handleProvideEstimate = (arg: (typeof damages.value)[0]) => {
     selectedPart.value = arg
-    modals.estimate = true
+    modals.provideEstimate = true
   }
 
   const handleAdd: SubmissionHandler<ProvideEstimateSchemaContext, any> = (values: ProvideEstimateSchemaContext) => {
@@ -32,12 +39,12 @@ export const useProvideEstimate = () => {
       submittedEstimates[selectedPart.value.index] = values
     }
 
-    modals.estimate = false
+    modals.provideEstimate = false
 
     if (partsRef.value) {
       const addedPartsIndex = Object.keys(submittedEstimates).map((index) => Number(index))
       const nextCard = [...Array(damages.value.length).keys()].find((index) => !addedPartsIndex.includes(index))
-      if (nextCard) {
+      if (typeof nextCard === "number") {
         partsRef.value[nextCard]?.scrollIntoView()
       }
 
@@ -57,8 +64,23 @@ export const useProvideEstimate = () => {
   const estimateTotalAmount = computed(() => {
     const values = Object.values(submittedEstimates)
 
-    return values.reduce((acc, { amount, workmanship }) => acc + (parseFloat(amount) + parseFloat(workmanship)), 0)
+    return values.reduce(
+      (acc, { amount, workmanship }) => acc + (currencyToNumber(amount) + currencyToNumber(workmanship)),
+      0
+    )
   })
+
+  const handleSubmitEstimate = () => {
+    const estimateLeft = damages.value.length - addedCount.value
+    if (!!estimateLeft) {
+      useToast.warning(`You have ${estimateLeft} estimate${estimateLeft > 1 ? "s" : ""} left to go.`, {
+        duration: 3000,
+      })
+      return
+    }
+
+    modals.estimateSubmitted = true
+  }
 
   onMounted(() => {
     if (wrapperRef.value) {
@@ -91,5 +113,6 @@ export const useProvideEstimate = () => {
     active,
     selectedPart,
     isDownloading,
+    handleSubmitEstimate,
   }
 }

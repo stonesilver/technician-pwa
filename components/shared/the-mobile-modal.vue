@@ -10,6 +10,7 @@ defineProps<{
   title?: string
   description?: string
   dismissible?: boolean
+  hideClose?: boolean
 }>()
 
 const open = defineModel({ default: false })
@@ -21,7 +22,7 @@ const onOpenChange = (e: boolean) => {
 
 <template>
   <Drawer v-model:open="open" :dismissible="open && (dismissible ?? true)" @update:open="onOpenChange">
-    <DrawerContent :class="contentClass">
+    <DrawerContent :hide-close="hideClose || (typeof dismissible === 'boolean' && !dismissible)" :class="contentClass">
       <div class="mx-auto w-full">
         <DrawerHeader :class="headerClass">
           <DrawerTitle :class="cn('text-lg text-gray-800 font-semibold', titleClass)">

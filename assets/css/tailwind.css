@@ -88,3 +88,8 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.modal-content-max-height {
+  max-height: 75vh;
+  max-height: 70dvh;
+}

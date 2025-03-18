@@ -2,7 +2,6 @@
 import { DropdownMenuArrow } from "reka-ui"
 
 const open = ref(false)
-const passwordIsVisible = reactive({ current_password: false, new_password: false })
 
 const formFields = [
   { model: "current_password", label: "Enter current password" },
@@ -28,10 +27,15 @@ const formFields = [
       </button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end" class="rounded-xl w-[125px]">
-      <DropdownMenuItem class="text-sm !text-gray-700 font-medium cursor-pointer" @click="open = true">
+      <DropdownMenuItem
+        class="text-sm !text-gray-700 font-medium h-[36px] rounded-lg cursor-pointer"
+        @click="open = true"
+      >
         Password
       </DropdownMenuItem>
-      <DropdownMenuItem class="text-sm !text-error-500 font-medium cursor-pointer">Logout</DropdownMenuItem>
+      <DropdownMenuItem class="text-sm !text-error-500 font-medium h-[36px] rounded-lg cursor-pointer"
+        >Logout</DropdownMenuItem
+      >
 
       <DropdownMenuArrow class="[&>path]:fill-white stroke-slate-200 w-4 h-3" />
     </DropdownMenuContent>
@@ -54,18 +58,7 @@ const formFields = [
             :label="label"
             v-slot="{ field }"
           >
-            <Input :placeholder="label" v-bind="field">
-              <template #append>
-                <shared-icon
-                  :name="passwordIsVisible[model as keyof typeof passwordIsVisible] ? 'eye' : 'eye-slash'"
-                  class="cursor-pointer"
-                  @click="
-                    passwordIsVisible[model as keyof typeof passwordIsVisible] =
-                      !passwordIsVisible[model as keyof typeof passwordIsVisible]
-                  "
-                />
-              </template>
-            </Input>
+            <shared-password-input :field="field" :placeholder="label" />
           </shared-form-field>
         </vee-form>
 

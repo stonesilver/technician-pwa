@@ -15,6 +15,7 @@ withDefaults(
     title?: string
     description?: string
     dismissible?: boolean
+    hideClose?: boolean
   }>(),
   {
     dismissible: undefined,
@@ -47,6 +48,7 @@ const isOpen = defineModel<boolean>()
     :title-class="titleClass"
     :description-class="descriptionClass"
     :dismissible="dismissible"
+    :hide-close="hideClose"
   >
     <template #content>
       <ModalContent />
@@ -67,6 +69,7 @@ const isOpen = defineModel<boolean>()
     :title-class="titleClass"
     :description-class="descriptionClass"
     :dismissible="dismissible"
+    :hide-close="hideClose"
   >
     <template #content>
       <ModalContent />

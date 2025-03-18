@@ -10,6 +10,7 @@ const props = defineProps<{
   class?: HTMLAttributes["class"]
   prependIcon?: IconProps
   appendIcon?: IconProps
+  currency?: boolean
 }>()
 
 // const emits = defineEmits<{
@@ -34,6 +35,7 @@ const value = defineModel<HTMLInputElement["value"]>()
 
     <input
       v-model="value"
+      v-currency="currency"
       :class="
         cn(
           'flex flex-1 h-11 w-full rounded-md ring-1 text-gray-900 ring-gray-200 bg-gray-50 py-1 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-[#999CA0] focus-visible:outline-none focus-visible:border-[0.4px] focus-visible:border-mca focus-visible:ring-[3px] focus-visible:ring-primary-100 disabled:cursor-not-allowed disabled:opacity-50',

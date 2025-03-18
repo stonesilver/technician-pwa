@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   ssr: false,
   devServer: {
     port: 5177,
@@ -39,15 +39,16 @@ export default defineNuxtConfig({
     componentDir: "./components/ui",
   },
   pwa: {
-    registerType: "autoUpdate", // "prompt", //
+    registerType: "prompt", // "autoUpdate", //
     strategies: "injectManifest",
     srcDir: "./service-worker",
     filename: "sw.ts",
     manifest: {
       id: "/?v=1.0.1",
-      name: "MCA-Technician-App",
-      short_name: "MTA",
-      description: "Technicians auto parts reporting",
+      name: "Auto Quote Estimator",
+      short_name: "MyCover.ai",
+      description:
+        "A comprehensive platform designed for auto technicians and parts dealers to quickly and accurately generate pricing estimates for damaged parts and associated workmanship",
       theme_color: "#3BAA90",
       icons: [
         {
@@ -103,24 +104,25 @@ export default defineNuxtConfig({
       ],
       screenshots: [
         {
-          src: "app-icons/screenshot-home.webp",
-          sizes: "512x512",
-          type: "image/webp",
+          src: "app-icons/screenshot-login.png",
+          sizes: "1500x3376",
+          type: "image/png",
           form_factor: "wide",
         },
         {
-          src: "app-icons/wallet-home.webp",
-          sizes: "512x512",
-          type: "image/webp",
+          src: "app-icons/screenshot-dashboard.png",
+          sizes: "1500x3376",
+          type: "image/png",
           form_factor: "narrow",
         },
         {
-          src: "app-icons/dashboard-home.webp",
-          sizes: "512x512",
-          type: "image/webp",
+          src: "app-icons/screenshot-wallet.png",
+          sizes: "1500x3376",
+          type: "image/png",
           form_factor: "narrow",
         },
       ],
+      scope: process.env.VITE_API_DOMAIN || "/",
       start_url: "/",
       display: "standalone",
       background_color: "#ffffff",
@@ -132,6 +134,7 @@ export default defineNuxtConfig({
       cleanupOutdatedCaches: true,
       navigateFallback: "/",
       globPatterns: ["**/*.{js,css,html,png,svg,ico}"],
+      navigateFallbackAllowlist: [/^\/$/, /^\/app\/provide-estimate\?.*$/, /^\/app\/$/],
     },
     injectManifest: {
       globPatterns: ["**/*.{js,css,html,png,svg,ico}"],
@@ -145,7 +148,7 @@ export default defineNuxtConfig({
     devOptions: {
       enabled: true,
       navigateFallback: "/",
-      navigateFallbackAllowlist: [/^\/$/],
+      navigateFallbackAllowlist: [/^\/$/, /^\/app\/provide-estimate\?.*$/],
       type: "module",
       suppressWarnings: true,
     },

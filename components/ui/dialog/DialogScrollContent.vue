@@ -11,7 +11,7 @@ import {
 } from "reka-ui"
 import { computed, type HTMLAttributes } from "vue"
 
-const props = defineProps<DialogContentProps & { class?: HTMLAttributes["class"] }>()
+const props = defineProps<DialogContentProps & { class?: HTMLAttributes["class"]; hideClose?: boolean }>()
 const emits = defineEmits<DialogContentEmits>()
 
 const delegatedProps = computed(() => {
@@ -46,7 +46,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
       >
         <slot />
 
-        <DialogClose class="absolute top-5 right-4 p-0.5 transition-colors rounded-md">
+        <DialogClose v-if="!hideClose" class="absolute top-5 right-4 p-0.5 transition-colors rounded-md">
           <shared-icon name="close" class-name="size-4" />
           <span class="sr-only">Close</span>
         </DialogClose>

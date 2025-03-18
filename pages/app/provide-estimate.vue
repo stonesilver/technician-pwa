@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { numberToCurrency } from "~/utils/helper-functions/return-string.ts"
-
 definePageMeta({ layout: "default", titleTag: "Provide estimate" })
 
 const dummyVehicleDetails = [

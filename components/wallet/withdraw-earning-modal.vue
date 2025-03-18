@@ -61,6 +61,7 @@ const test = (arg: any) => {
             inputmode="numeric"
             placeholder="Enter amount"
             autocomplete="off"
+            currency
             :prepend-icon="{ name: 'naira', className: 'size-3 [&>path]:fill-gray-600' }"
             :maxlength="10"
             v-bind="field"

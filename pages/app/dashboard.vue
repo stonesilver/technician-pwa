@@ -9,8 +9,33 @@ const dummyTasks = [
   "04325ce7-9f6c-4824-b406-d5473a41b64e",
 ]
 
-const openWithdrawalModal = ref(false)
+const dummyPendingEstimates = [
+  {
+    id: "a6ab63cd-592b-4535-8b23-860ba8077630",
+    description: "Toyota Camry 2024 || Red",
+    totalDamages: 4,
+    provided: 1,
+  },
+  {
+    id: "e93db31c-4c06-4eb8-9bb3-304b360a8599",
+    description: "Honda Accord 2021 || Blue",
+    totalDamages: 4,
+    provided: 1,
+  },
+]
+
+const modals = reactive({ openWithdrawalModal: false, openPendingEstimatesModal: false })
 const hasEstimate = true
+
+const completePendingEstimateOnClick = async () => {
+  const count = 2
+
+  if (count > 1) {
+    modals.openPendingEstimatesModal = true
+  } else {
+    await navigateTo("/app/provide-estimate")
+  }
+}
 </script>
 
 <template>
@@ -19,7 +44,7 @@ const hasEstimate = true
       text="You currently have an uncompleted repair estimate"
       action-text="Complete"
       class="mt-[22px]"
-      @action="navigateTo('/app/provide-estimate')"
+      @action="completePendingEstimateOnClick"
     />
 
     <h1 class="text-lg text-gray-700 font-medium mt-[22px] leading-none">Welcome back Technician Ade</h1>
@@ -43,7 +68,7 @@ const hasEstimate = true
         <Button
           variant="default_light"
           class="h-[50px] w-full md:max-w-[289px] ml-auto rounded"
-          @click="openWithdrawalModal = true"
+          @click="modals.openWithdrawalModal = true"
         >
           Withdraw Earnings
         </Button>
@@ -79,6 +104,11 @@ const hasEstimate = true
       </div>
     </div>
 
-    <wallet-withdraw-earning-modal v-model="openWithdrawalModal" />
+    <wallet-withdraw-earning-modal v-model="modals.openWithdrawalModal" />
+
+    <dashboard-pending-estimates-modal
+      v-model="modals.openPendingEstimatesModal"
+      :pending-estimates="dummyPendingEstimates"
+    />
   </div>
 </template>

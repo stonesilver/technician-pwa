@@ -10,6 +10,7 @@ const props = defineProps<{
   title?: string
   description?: string
   dismissible?: boolean
+  hideClose?: boolean
 }>()
 
 const open = defineModel({ default: false })
@@ -27,7 +28,11 @@ const onInteractOutside = (e: Event) => {
 
 <template>
   <Dialog v-model:open="open" @update:open="onOpenChange">
-    <DialogScrollContent :class="cn('sm:max-w-[425px] rounded-xl', contentClass)" @interact-outside="onInteractOutside">
+    <DialogScrollContent
+      :hide-close="hideClose || (typeof dismissible === 'boolean' && !dismissible)"
+      :class="cn('sm:max-w-[425px] rounded-xl', contentClass)"
+      @interact-outside="onInteractOutside"
+    >
       <DialogHeader :class="headerClass">
         <DialogTitle :class="cn('text-lg text-gray-800 font-semibold', titleClass)">
           <slot name="title">{{ title }}</slot>

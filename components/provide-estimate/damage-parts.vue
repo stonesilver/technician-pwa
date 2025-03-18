@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ProvideEstimateSchema } from "~/utils/yup-schemas"
 import { numberToCurrency } from "~/utils/helper-functions/return-string.ts"
+import { currencyToNumber } from "~/utils/helper-functions/return-number"
 
 const {
   wrapperRef,
@@ -17,6 +18,7 @@ const {
   active,
   selectedPart,
   isDownloading,
+  handleSubmitEstimate,
 } = useProvideEstimate()
 </script>
 
@@ -35,7 +37,7 @@ const {
           :data-index="index"
         >
           <div class="relative size-fit">
-            <img :src="item.image" :alt="item.side" class="h-[342px] object-cover block rounded-[3.68px]" />
+            <img :src="item.image" :alt="item.side" class="h-[342px] object-cover block rounded-[3.68px] bg-gray-200" />
 
             <img
               v-if="submittedEstimates[item.index]"
@@ -58,7 +60,7 @@ const {
               v-for="(value, key) in submittedEstimates[item.index]"
               :key="key"
               :label="key"
-              :value="numberToCurrency(value)"
+              :value="numberToCurrency(currencyToNumber(value))"
               label-class="leading-none text-gray-400 capitalize"
               value-class="text-mca leading-none mt-[2px]"
             />
@@ -92,7 +94,7 @@ const {
     <div
       class="mt-24 h-20 border-t-[0.6px] border-t-success-500 bg-success-50 text-center center-item w-[calc(100%+40px)] max-md:-translate-x-5 md:w-full"
     >
-      <p class="text-gray-500 text-sm leading-none">Total Estimate</p>
+      <p class="text-gray-500 text-sm leading-none font-medium">Total Estimate</p>
       <p class="text-2xl font-semibold text-gray-800 mt-[6px]">{{ numberToCurrency(estimateTotalAmount) }}</p>
     </div>
 
@@ -103,11 +105,11 @@ const {
 
     <div ref="submitRef" class="pb-6 grid grid-cols-[auto_1fr] gap-3.5">
       <Button variant="secondary_soft" class="h-14" @click="modals.doLater = true">Do this later</Button>
-      <Button class="h-14">{{ addedCount }} of 5</Button>
+      <Button class="h-14" @click="handleSubmitEstimate">{{ addedCount }} of 5</Button>
     </div>
 
     <shared-responsive-modal
-      v-model="modals.estimate"
+      v-model="modals.provideEstimate"
       title="Provide Estimate"
       title-class="text-base text-secondary-3"
     >
@@ -143,7 +145,7 @@ const {
                 inputmode="numeric"
                 placeholder="E.g., ₦25,000"
                 autocomplete="off"
-                :maxlength="10"
+                currency
                 :prepend-icon="{ name: 'naira', className: 'size-3 [&>path]:fill-gray-600' }"
                 v-bind="field"
               />
@@ -155,7 +157,7 @@ const {
                 inputmode="numeric"
                 placeholder="Enter the estimated cost of repair"
                 autocomplete="off"
-                :maxlength="10"
+                currency
                 :prepend-icon="{ name: 'naira', className: 'size-3 [&>path]:fill-gray-600' }"
                 v-bind="field"
               />
@@ -166,7 +168,12 @@ const {
 
       <template #footer>
         <div class="grid grid-cols-2 gap-3 w-full max-lg:pb-[30px] max-lg:px-4">
-          <Button variant="secondary_soft" type="button" class="h-12 rounded-[6.92px]" @click="modals.estimate = false">
+          <Button
+            variant="secondary_soft"
+            type="button"
+            class="h-12 rounded-[6.92px]"
+            @click="modals.provideEstimate = false"
+          >
             Cancel
           </Button>
 
@@ -229,6 +236,27 @@ const {
 
       <template #footer>
         <Button class="h-12 rounded-[6.92px] w-full mt-14" @click="navigateTo('/app/dashboard')">Alright</Button>
+      </template>
+    </shared-the-modal>
+
+    <shared-the-modal v-model="modals.estimateSubmitted" :dismissible="false" content-class="py-9">
+      <template #content>
+        <div class="size-[34px] rounded-full mx-auto center-item ring-[12px] bg-success-500 ring-success-50">
+          <shared-icon name="check" />
+        </div>
+
+        <p class="text-center text-secondary-3 text-xl font-semibold mt-4">Estimate Submitted</p>
+
+        <p class="text-gray-700 text-base text-center">
+          You've successfully submitted the repair estimate for this damage. We'll review it and process your earnings
+          shortly.
+        </p>
+      </template>
+
+      <template #footer>
+        <Button class="h-12 rounded-[6.92px] w-full mt-14" @click="navigateTo('/app/dashboard')">
+          Go to dashboard
+        </Button>
       </template>
     </shared-the-modal>
   </div>
