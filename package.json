@@ -7,12 +7,13 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lint": "eslint --ext .ts,.js,.vue .",
+    "lint:fix": "npm run lint",
+    "format": "prettier --write '**/*.{js,vue,ts,css,html}'"
   },
   "dependencies": {
     "@nuxt/image": "^1.9.0",
-    "@typescript-eslint/eslint-plugin": "^8.26.1",
-    "@typescript-eslint/parser": "^8.26.1",
     "@vee-validate/nuxt": "^4.15.0",
     "@vee-validate/yup": "^4.15.0",
     "@vite-pwa/nuxt": "0.10.6",
@@ -35,10 +36,13 @@
   "devDependencies": {
     "@nuxtjs/ngrok": "^3.0.1",
     "@nuxtjs/tailwindcss": "^6.13.2",
+    "@typescript-eslint/eslint-plugin": "^8.27.0",
+    "@typescript-eslint/parser": "^8.27.0",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-vue": "^10.0.0",
+    "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "typescript": "^5.8.2"
   }

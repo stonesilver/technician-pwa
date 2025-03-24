@@ -1,4 +1,4 @@
-import { formatCurrency } from "~/utils/helper-functions/return-string.ts"
+import { formatCurrency } from "~/utils/helper-functions/returns-string.ts"
 
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.directive("currency", {

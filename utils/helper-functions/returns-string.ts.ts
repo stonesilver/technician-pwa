@@ -1,4 +1,26 @@
 const defaultCurrency = { locale: "en-NG", currency: "NGN", style: "currency" }
+const welcomeMessages = [
+  "Welcome back, champion! 🚀",
+  "Great to see you again! 🔥",
+  "Ready to conquer the day? 💪",
+  "You're in! Let's make things happen. 🎯",
+  "Back to greatness! ✨",
+  "Your adventure continues... 🌟",
+  "Making moves, one step at a time. 🚶‍♂️",
+  "Success starts now! 🚀",
+  "Let's build something amazing today! 🔨",
+  "You got this! Keep pushing forward. 💯",
+  "Back at it again! Let’s go! 🏆",
+  "Welcome back! Your journey awaits. 🌍",
+  "Time to shine! 🌞",
+  "Another day, another opportunity. 📈",
+  "Glad you're here! Let’s do this. 🎉",
+  "Crushing goals one login at a time. 🚀",
+  "Great things ahead! Keep moving. 🏃‍♀️",
+  "Success loves preparation. Let's go! 🔥",
+  "The best is yet to come! 🌟",
+  "Every login is a step closer to greatness! 💪",
+]
 
 export const numberToCurrency = (
   number: number | bigint | string | [string],
@@ -95,6 +117,10 @@ export const formatCurrency = (value: string) => {
     ?.toString()
     .split("")
     .forEach((item) => {
+      if (str.length == 1 && str[0] === "0") {
+        str = ""
+      }
+
       if (!str.includes(".") || item !== ".") {
         str = str + item
       }
@@ -110,4 +136,8 @@ export const formatCurrency = (value: string) => {
   const val = user_input.length ? user_input.join(".") : "0"
 
   return val
+}
+
+export const welcomeBackMessage = () => {
+  return welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)]
 }

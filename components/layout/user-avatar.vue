@@ -7,6 +7,13 @@ const formFields = [
   { model: "current_password", label: "Enter current password" },
   { model: "new_password", label: "Enter new password" },
 ]
+
+const handleLogout = () => {
+  localStorage.removeItem("technician")
+  useState("technician").value = null
+
+  return navigateTo("/")
+}
 </script>
 
 <template>
@@ -33,9 +40,12 @@ const formFields = [
       >
         Password
       </DropdownMenuItem>
-      <DropdownMenuItem class="text-sm !text-error-500 font-medium h-[36px] rounded-lg cursor-pointer"
-        >Logout</DropdownMenuItem
+      <DropdownMenuItem
+        class="text-sm !text-error-500 font-medium h-[36px] rounded-lg cursor-pointer"
+        @click="handleLogout"
       >
+        Logout
+      </DropdownMenuItem>
 
       <DropdownMenuArrow class="[&>path]:fill-white stroke-slate-200 w-4 h-3" />
     </DropdownMenuContent>

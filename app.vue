@@ -1,6 +1,4 @@
 <script setup type="ts">
-// const openModal = ref(false)
-// const nuxtApp = useNuxtApp()
 
 onMounted(() => {
   // disable IOS scaling
@@ -12,15 +10,7 @@ onMounted(() => {
 })
 
 
-// onMounted(async () => {
-//   //   await nuxtApp.$pwa?.install()
-//   // console.log(nuxtApp.$pwa)
-//   // useNuxtApp().$pwa?.install();
 
-//   if (!nuxtApp.$pwa?.isPWAInstalled) {
-//     openModal.value = true
-//   }
-// })
 
 const showModal = ref(false);
 const deferredPrompt = ref(null);
@@ -42,7 +32,6 @@ onMounted(() => {
     deferredPrompt.value = null;
   window.location.href = import.meta.env.VITE_BASE_DOMAIN || '/'
   // Optionally, send analytics event to indicate successful install
-  console.log('PWA was installed');
 });
 })
 
@@ -53,11 +42,8 @@ const installPWA = async () => {
     const choiceResult = await deferredPrompt.value.userChoice;
 
     if (choiceResult.outcome === 'accepted') {
-      console.log('User installed the PWA');
-      // showModal.value = false;
 
     } else {
-      console.log('User dismissed the PWA install prompt');
        showModal.value = false
     }
 
@@ -74,21 +60,7 @@ const installPWA = async () => {
       <Toaster richColors position="top-center" />
       <NuxtPage />
 
-      <shared-the-modal v-model="showModal" :dismissible="false" content-class="py-6 rounded-xl max-w-[332px]">
-        <template #content>
-          <div class="text-center">
-            <div class="size-[50px] rounded-full bg-success-50 mx-auto center-item">
-              <shared-icon name="circle-arrow-down" />
-            </div>
-            <h2 class="text-secondary-3 leading-none text-xl font-semibold mt-6">Install PWA</h2>
-            <p class="mt-[14px] text-sm leading-[20px] text-gray-700 max-w-[217px] mx-auto">
-              For a faster, smoother experience, we recommend installing the PWA on your device
-            </p>
-
-            <Button class="w-full mx-auto mt-[34px] h-[50px]" @click="installPWA">Install PWA</Button>
-          </div>
-        </template>
-      </shared-the-modal>
+      <layout-install-pwa-modal v-model="showModal" @install-pwa="installPWA" />
     </NuxtLayout>
   </div>
 </template>

@@ -44,7 +44,7 @@ export default defineNuxtConfig({
     srcDir: "./service-worker",
     filename: "sw.ts",
     manifest: {
-      id: "/?v=1.0.1",
+      id: "/?v=0.0.1",
       name: "Auto Quote Estimator",
       short_name: "MyCover.ai",
       description:
@@ -143,7 +143,7 @@ export default defineNuxtConfig({
       installPrompt: true,
       // you don't need to include this: only for testing purposes
       // if enabling periodic sync for update use 1 hour or so (periodicSyncForUpdates: 3600)
-      periodicSyncForUpdates: 20,
+      periodicSyncForUpdates: 5000,
     },
     devOptions: {
       enabled: true,

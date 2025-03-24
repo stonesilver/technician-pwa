@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 definePageMeta({ layout: "default", titleTag: "Estimate" })
-import { numberToCurrency } from "~/utils/helper-functions/return-string.ts"
+import { numberToCurrency } from "~/utils/helper-functions/returns-string.ts"
 
 const openModal = ref(false)
 const dummyTasks = [

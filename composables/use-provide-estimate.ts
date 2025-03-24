@@ -1,7 +1,7 @@
 import type { ProvideEstimateSchemaContext } from "~/utils/yup-schemas"
 import type { SubmissionHandler } from "vee-validate"
 import { dummyDamages } from "~/components/provide-estimate/constants.provide-estimate"
-import { currencyToNumber } from "~/utils/helper-functions/return-number"
+import { currencyToNumber } from "~/utils/helper-functions/returns-number"
 
 export const useProvideEstimate = () => {
   const wrapperRef = ref<HTMLDivElement | null>(null)

@@ -2,7 +2,7 @@
 definePageMeta({ layout: "default", titleTag: "Wallet" })
 
 import { cn } from "@/lib/utils"
-import { numberToCurrency } from "~/utils/helper-functions/return-string.ts"
+import { numberToCurrency } from "~/utils/helper-functions/returns-string.ts"
 
 const openModal = ref(false)
 const openWithdrawalModal = ref(false)
@@ -69,10 +69,10 @@ const handleViewTransactionDetails = (arg: string) => {
       v-model="openModal"
       title="Transaction details"
       header-class="max-lg:px-5"
-      content-class="bg-gray-50"
+      content-class="bg-gray-50 h-auto"
     >
       <template #content>
-        <div class="py-4 pb-8 max-lg:px-5">
+        <div class="py-4 lg:pb-0 max-lg:pb-8 max-lg:px-5">
           <div
             class="border-[0.4px] max-[375px]:px-2 py-3 px-4 flex gap-3.5"
             :class="selectedTransaction === 'in' ? 'bg-success-25 border-success-500' : 'bg-error-25 border-error-500'"
@@ -110,7 +110,7 @@ const handleViewTransactionDetails = (arg: string) => {
             </div>
           </div>
 
-          <div class="mt-[31px] grid grid-cols-2 gap-3 pb-8">
+          <div class="mt-[31px] grid grid-cols-2 gap-3 max-lg:pb-8">
             <shared-list-item
               v-for="({ label, value }, index) in transactionDetails"
               :key="index"

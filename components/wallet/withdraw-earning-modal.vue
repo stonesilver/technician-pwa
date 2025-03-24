@@ -31,7 +31,7 @@ const test = (arg: any) => {
             :options="dummyBanks"
             placeholder="select bank"
             empty-text="No bank found"
-            @update:model-value="($event) => field.onChange(($event as unknown as Options))"
+            @update:model-value="($event) => field.onChange($event as unknown as Options)"
           />
           <!-- @update:model-value="test" -->
         </shared-form-field>
@@ -63,7 +63,6 @@ const test = (arg: any) => {
             autocomplete="off"
             currency
             :prepend-icon="{ name: 'naira', className: 'size-3 [&>path]:fill-gray-600' }"
-            :maxlength="10"
             v-bind="field"
           />
         </shared-form-field>

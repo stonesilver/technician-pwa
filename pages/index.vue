@@ -2,13 +2,38 @@
 import type { LoginPayload } from "~/utils/yup-schemas"
 import { LoginSchema } from "~/utils/yup-schemas"
 import { type SubmissionHandler } from "vee-validate"
+import { welcomeBackMessage } from "~/utils/helper-functions/returns-string.ts"
 
 definePageMeta({ layout: "auth" })
 
-const handleLogin: SubmissionHandler<LoginPayload, any> = async (values: LoginPayload) => {
-  console.log(values)
+const isLoading = ref(false)
 
-  await navigateTo("/app/provide-estimate?q=8677-7567-766-43245-hh64")
+const handleLogin: SubmissionHandler<LoginPayload, any> = async (values: LoginPayload) => {
+  isLoading.value = true
+
+  const res = useApi()<{ access_token: string }>("/auth/login", {
+    method: "POST",
+    body: { ...values, email: values.phone_number },
+  })
+  useToast.promise(res, {
+    loading: "Authenticating",
+    success: async (data: any) => {
+      localStorage.setItem("technician", data.access_token)
+
+      await navigateTo("/app/provide-estimate?q=8677-7567-766-43245-hh64")
+
+      isLoading.value = false
+      return welcomeBackMessage()
+    },
+    error: (error: any) => {
+      isLoading.value = false
+      return error as string
+    },
+    description: (arg: any) => {
+      console.log(arg, "******* arg *****")
+      return typeof arg === "string" ? "Ensure your phone number and password is correct." : ""
+    },
+  })
 }
 </script>
 
@@ -35,7 +60,7 @@ const handleLogin: SubmissionHandler<LoginPayload, any> = async (values: LoginPa
               type="tel"
               inputmode="numeric"
               placeholder="Enter  phone number"
-              maxlength="11"
+              maxlength="110"
               autocomplete="off"
               v-bind="field"
             />
@@ -46,7 +71,7 @@ const handleLogin: SubmissionHandler<LoginPayload, any> = async (values: LoginPa
           </shared-form-field>
         </div>
 
-        <Button class="mt-28">Continue</Button>
+        <Button class="mt-28" :is-loading="isLoading" :disabled="isLoading">Continue</Button>
       </vee-form>
     </div>
 

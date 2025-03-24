@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { UserContext } from "~/types/auth"
+
 const checked = defineModel({ default: false })
 const showContent = ref(false)
 const route = useRoute()
@@ -12,6 +14,8 @@ const routes = [
   },
   { label: "Wallet", icons: { active: "wallet-filled", inactive: "wallet-outline" }, href: "/app/wallet" },
 ]
+
+const user = useState<UserContext>("technician")
 
 watch(route, () => {
   showContent.value = false
@@ -58,8 +62,8 @@ watch(route, () => {
           >
             <div v-if="showContent" class="bg-white w-full max-w-[266px] h-full">
               <div class="h-[73px] border-b px-5 flex justify-center flex-col">
-                <p class="text-xl font-medium text-gray-800">Chigozie Ezenwa</p>
-                <p class="text-gray-600 text-sm leading-[115%]">Technician</p>
+                <p class="text-xl font-medium text-gray-800">{{ user.name }}</p>
+                <p class="text-gray-600 text-sm leading-[115%]">{{ user.role }}</p>
               </div>
 
               <div class="mt-10 px-5 space-y-[18px]">

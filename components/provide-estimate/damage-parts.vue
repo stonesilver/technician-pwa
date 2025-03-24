@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ProvideEstimateSchema } from "~/utils/yup-schemas"
-import { numberToCurrency } from "~/utils/helper-functions/return-string.ts"
-import { currencyToNumber } from "~/utils/helper-functions/return-number"
+import { numberToCurrency } from "~/utils/helper-functions/returns-string.ts"
+import { currencyToNumber } from "~/utils/helper-functions/returns-number"
 
 const {
   wrapperRef,
@@ -36,8 +36,18 @@ const {
           class="h-[469px] bg-gray-50 snap-start p-[11px_12px] rounded"
           :data-index="index"
         >
-          <div class="relative size-fit">
-            <img :src="item.image" :alt="item.side" class="h-[342px] object-cover block rounded-[3.68px] bg-gray-200" />
+          <div class="relative w-full">
+            <nuxt-img
+              v-slot="{ src, isLoaded, imgAttrs }"
+              :src="item.image"
+              :alt="item.side"
+              class="h-[342px] object-cover block rounded-[3.68px] bg-gray-200"
+              :custom="true"
+            >
+              <img v-if="isLoaded" v-bind="imgAttrs" :src="src" class="h-[342px] object-cover block rounded-[3.68px]" />
+
+              <shared-image-loader v-else class="h-[342px]" />
+            </nuxt-img>
 
             <img
               v-if="submittedEstimates[item.index]"
@@ -125,7 +135,7 @@ const {
               variant="ghost"
               type="button"
               :disabled="isDownloading"
-              class="text-base leading-none font-medium text-mca h-auto"
+              class="text-sm hover:bg-success-50 leading-none font-medium !text-mca h-auto"
               @click="handleDownloadImage(selectedPart?.image ?? '', selectedPart?.side ?? '')"
             >
               Download Damage
