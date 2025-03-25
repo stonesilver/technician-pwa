@@ -19,11 +19,19 @@ const {
   selectedPart,
   isDownloading,
   handleSubmitEstimate,
+  dummyVehicleDetails,
 } = useProvideEstimate()
 </script>
 
 <template>
   <div>
+    <div class="mt-8 p-[17px_10px] md:p-[17px_16px] border-[0.4px] border-mca bg-primary-25">
+      <p class="text-mca font-medium text-sm leading-none">Vehicle Information</p>
+
+      <div class="mt-3 grid grid-cols-[auto_auto] gap-2">
+        <shared-list-item v-for="(item, index) in dummyVehicleDetails" :key="index" v-bind="item" class="even:text-right" />
+      </div>
+    </div>
     <div class="mt-14">
       <div
         ref="wrapperRef"
@@ -85,9 +93,7 @@ const {
             </button>
           </div>
 
-          <Button v-else variant="default_light" class="w-full h-12 mt-[19px]" @click="handleProvideEstimate(item)">
-            Provide estimate
-          </Button>
+          <Button v-else variant="default_light" class="w-full h-12 mt-[19px]" @click="handleProvideEstimate(item)"> Provide estimate </Button>
         </div>
       </div>
 
@@ -108,21 +114,14 @@ const {
       <p class="text-2xl font-semibold text-gray-800 mt-[6px]">{{ numberToCurrency(estimateTotalAmount) }}</p>
     </div>
 
-    <shared-info-card
-      text="Please ensure that the repair estimate is accurate and aligns with the current market rates"
-      class="my-[26px]"
-    />
+    <shared-info-card text="Please ensure that the repair estimate is accurate and aligns with the current market rates" class="my-[26px]" />
 
     <div ref="submitRef" class="pb-6 grid grid-cols-[auto_1fr] gap-3.5">
       <Button variant="secondary_soft" class="h-14" @click="modals.doLater = true">Do this later</Button>
       <Button class="h-14" @click="handleSubmitEstimate">{{ addedCount }} of 5</Button>
     </div>
 
-    <shared-responsive-modal
-      v-model="modals.provideEstimate"
-      title="Provide Estimate"
-      title-class="text-base text-secondary-3"
-    >
+    <shared-responsive-modal v-model="modals.provideEstimate" title="Provide Estimate" title-class="text-base text-secondary-3">
       <template #content>
         <div class="max-lg:px-5 max-h-[75vh] overflow-y-auto pb-[47px]">
           <div class="h-[251px] overflow-hidden mt-4">
@@ -178,14 +177,7 @@ const {
 
       <template #footer>
         <div class="grid grid-cols-2 gap-3 w-full max-lg:pb-[30px] max-lg:px-4">
-          <Button
-            variant="secondary_soft"
-            type="button"
-            class="h-12 rounded-[6.92px]"
-            @click="modals.provideEstimate = false"
-          >
-            Cancel
-          </Button>
+          <Button variant="secondary_soft" type="button" class="h-12 rounded-[6.92px]" @click="modals.provideEstimate = false"> Cancel </Button>
 
           <Button form="provide-estimate" class="h-12 rounded-[6.92px]">Save</Button>
         </div>
@@ -203,8 +195,7 @@ const {
         <p class="text-gray-700 text-base text-center">
           <span class="block">We understand you may not have repair estimate for this damage at the moment</span>
           <span class="block mt-4">
-            <span class="text-warning-500">Note :</span> Kindly submit this within the next
-            <span class="text-mca">8hours</span>.
+            <span class="text-warning-500">Note :</span> Kindly submit this within the next <span class="text-mca">8hours</span>.
           </span>
         </p>
 
@@ -218,9 +209,7 @@ const {
 
       <template #footer>
         <div class="grid grid-cols-2 gap-3 w-full mt-14">
-          <Button variant="secondary_soft" type="button" class="h-12 rounded-[6.92px]" @click="modals.doLater = false">
-            Cancel
-          </Button>
+          <Button variant="secondary_soft" type="button" class="h-12 rounded-[6.92px]" @click="modals.doLater = false"> Cancel </Button>
 
           <Button class="h-12 rounded-[6.92px]" @click="navigateTo('/app/dashboard')">Alright</Button>
         </div>
@@ -237,8 +226,7 @@ const {
 
         <p class="text-gray-700 text-base text-center">
           <span class="block">
-            This repair estimate submission session has expired, as someone else has already provided an estimate for
-            this damage.
+            This repair estimate submission session has expired, as someone else has already provided an estimate for this damage.
           </span>
           <span class="block mt-4"> We recommend responding quickly next time to secure your submission. </span>
         </p>
@@ -258,15 +246,12 @@ const {
         <p class="text-center text-secondary-3 text-xl font-semibold mt-4">Estimate Submitted</p>
 
         <p class="text-gray-700 text-base text-center">
-          You've successfully submitted the repair estimate for this damage. We'll review it and process your earnings
-          shortly.
+          You've successfully submitted the repair estimate for this damage. We'll review it and process your earnings shortly.
         </p>
       </template>
 
       <template #footer>
-        <Button class="h-12 rounded-[6.92px] w-full mt-14" @click="navigateTo('/app/dashboard')">
-          Go to dashboard
-        </Button>
+        <Button class="h-12 rounded-[6.92px] w-full mt-14" @click="navigateTo('/app/dashboard')"> Go to dashboard </Button>
       </template>
     </shared-the-modal>
   </div>

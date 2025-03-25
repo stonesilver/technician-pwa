@@ -1,7 +1,7 @@
 {
   "jsxBracketSameLine": false,
   "jsxSingleQuote": true,
-  "printWidth": 120,
+  "printWidth": 150,
   "proseWrap": "never",
   "quoteProps": "as-needed",
   "semi": false,

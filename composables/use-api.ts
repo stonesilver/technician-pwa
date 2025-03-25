@@ -10,14 +10,14 @@ export const useApi = () => {
       }
     },
     onResponse({ response }) {
-      response._data = response._data
+      if (response._data.data) response._data = response._data.data
     },
     async onResponseError({ response }) {
       if (response.status === 401) {
         await nuxtApp.runWithContext(() => navigateTo("/", { replace: true }))
       }
 
-      throw response._data?.message || "Network error. Please try again soon."
+      throw response._data?.responseText || "Network error. Please try again soon."
     },
   })
   return api

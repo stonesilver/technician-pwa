@@ -3,26 +3,34 @@ import type { LoginPayload } from "~/utils/yup-schemas"
 import { LoginSchema } from "~/utils/yup-schemas"
 import { type SubmissionHandler } from "vee-validate"
 import { welcomeBackMessage } from "~/utils/helper-functions/returns-string.ts"
+import type { UserContext } from "~/types/auth"
 
 definePageMeta({ layout: "auth" })
+type LoginResponse = { token: string; user: UserContext }
 
 const isLoading = ref(false)
 
 const handleLogin: SubmissionHandler<LoginPayload, any> = async (values: LoginPayload) => {
   isLoading.value = true
 
-  const res = useApi()<{ access_token: string }>("/auth/login", {
+  const res = useApi()<LoginResponse>(loginUrl, {
     method: "POST",
-    body: { ...values, email: values.phone_number },
+    body: { ...values, phone_number: `+234${values.phone_number.slice(1)}` },
   })
-  useToast.promise(res, {
-    loading: "Authenticating",
-    success: async (data: any) => {
-      localStorage.setItem("technician", data.access_token)
 
-      await navigateTo("/app/provide-estimate?q=8677-7567-766-43245-hh64")
+  useToast.promise(res, {
+    loading: "Checking credentials...",
+    success: async ({ token, user }: LoginResponse) => {
+      localStorage.setItem("technician", token)
+      useState<UserContext>("technician", () => user)
+      await navigateTo("/app/provide-estimate?q=74ce2079-51a3-4278-aedc-296eaa969678")
 
       isLoading.value = false
+      await new Promise((resolve) =>
+        setTimeout(() => {
+          resolve("")
+        }, 1000)
+      )
       return welcomeBackMessage()
     },
     error: (error: any) => {
@@ -30,7 +38,6 @@ const handleLogin: SubmissionHandler<LoginPayload, any> = async (values: LoginPa
       return error as string
     },
     description: (arg: any) => {
-      console.log(arg, "******* arg *****")
       return typeof arg === "string" ? "Ensure your phone number and password is correct." : ""
     },
   })
@@ -56,14 +63,7 @@ const handleLogin: SubmissionHandler<LoginPayload, any> = async (values: LoginPa
       >
         <div class="flex-1 flex flex-col justify-center space-y-6">
           <shared-form-field name="phone_number" label="Phone number" v-slot="{ field }">
-            <Input
-              type="tel"
-              inputmode="numeric"
-              placeholder="Enter  phone number"
-              maxlength="110"
-              autocomplete="off"
-              v-bind="field"
-            />
+            <Input type="tel" inputmode="numeric" placeholder="Enter  phone number" maxlength="110" autocomplete="off" v-bind="field" />
           </shared-form-field>
 
           <shared-form-field name="password" label="Password" v-slot="{ field }">

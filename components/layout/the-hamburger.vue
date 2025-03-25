@@ -62,8 +62,8 @@ watch(route, () => {
           >
             <div v-if="showContent" class="bg-white w-full max-w-[266px] h-full">
               <div class="h-[73px] border-b px-5 flex justify-center flex-col">
-                <p class="text-xl font-medium text-gray-800">{{ user.name }}</p>
-                <p class="text-gray-600 text-sm leading-[115%]">{{ user.role }}</p>
+                <p class="text-xl font-medium text-gray-800">{{ user.first_name }}</p>
+                <p class="text-gray-600 text-sm leading-[115%] capitalize">{{ user.user_type }}</p>
               </div>
 
               <div class="mt-10 px-5 space-y-[18px]">

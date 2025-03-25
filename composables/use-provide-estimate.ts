@@ -3,6 +3,14 @@ import type { SubmissionHandler } from "vee-validate"
 import { dummyDamages } from "~/components/provide-estimate/constants.provide-estimate"
 import { currencyToNumber } from "~/utils/helper-functions/returns-number"
 
+const dummyVehicleDetails = [
+  { label: "Vehicle type", value: "Hatchback" },
+  { label: "Vehicle manufacturer", value: "Toyota" },
+  { label: "Vehicle model", value: "Rav4" },
+  { label: "Manufactured year", value: "2020" },
+  { label: "Vehicle color", value: "Blue" },
+]
+
 export const useProvideEstimate = () => {
   const wrapperRef = ref<HTMLDivElement | null>(null)
   const submitRef = ref<HTMLDivElement | null>(null)
@@ -64,10 +72,7 @@ export const useProvideEstimate = () => {
   const estimateTotalAmount = computed(() => {
     const values = Object.values(submittedEstimates)
 
-    return values.reduce(
-      (acc, { amount, workmanship }) => acc + (currencyToNumber(amount) + currencyToNumber(workmanship)),
-      0
-    )
+    return values.reduce((acc, { amount, workmanship }) => acc + (currencyToNumber(amount) + currencyToNumber(workmanship)), 0)
   })
 
   const handleSubmitEstimate = () => {
@@ -114,5 +119,6 @@ export const useProvideEstimate = () => {
     selectedPart,
     isDownloading,
     handleSubmitEstimate,
+    dummyVehicleDetails,
   }
 }
