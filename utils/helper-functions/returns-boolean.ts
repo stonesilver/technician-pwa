@@ -5,13 +5,17 @@ export const isTokenValid = () => {
     if (!token) {
       return false
     } else {
-      const { exp } = JSON.parse(atob(token?.split(".")[1] ?? {}))
+      try {
+        const { exp } = JSON.parse(atob(token?.split(".")[1] ?? {}))
 
-      if (!exp) {
+        if (!exp) {
+          return false
+        }
+
+        return exp * 1000 >= new Date().getTime()
+      } catch (error) {
         return false
       }
-
-      return exp * 1000 >= new Date().getTime()
     }
   }
 
