@@ -10,14 +10,7 @@ export default defineNuxtConfig({
     //   cert: "./localhost+2.pem",
     // },
   },
-  modules: [
-    "@vite-pwa/nuxt",
-    "@nuxt/image",
-    "@nuxtjs/tailwindcss",
-    "shadcn-nuxt",
-    "@vee-validate/nuxt",
-    "@nuxtjs/ngrok",
-  ],
+  modules: ["@vite-pwa/nuxt", "@nuxt/image", "@nuxtjs/tailwindcss", "shadcn-nuxt", "@vee-validate/nuxt", "@nuxtjs/ngrok"],
   veeValidate: {
     // disable or enable auto imports
     autoImports: true,
@@ -44,7 +37,7 @@ export default defineNuxtConfig({
     srcDir: "./service-worker",
     filename: "sw.ts",
     manifest: {
-      id: "/?v=0.0.1",
+      id: "/?v=0.0.2",
       name: "Auto Quote Estimator",
       short_name: "MyCover.ai",
       description:
