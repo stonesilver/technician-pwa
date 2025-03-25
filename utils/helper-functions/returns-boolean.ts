@@ -5,7 +5,7 @@ export const isTokenValid = () => {
     if (!token) {
       return false
     } else {
-      const { exp } = JSON.parse(atob(token?.split(".")[1]))
+      const { exp } = JSON.parse(atob(token?.split(".")[1] ?? {}))
 
       if (!exp) {
         return false
