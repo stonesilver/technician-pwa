@@ -8,6 +8,7 @@ type DetailsContext = {
   damageDetails: Options[][]
   amountPaidToTechnician: string
   isTechnicianPaid: boolean
+  totalDamagedParts: number
 }
 
 const props = defineProps<{ id: string }>()
@@ -37,8 +38,9 @@ const getEstimateDetails = async (val: boolean | undefined) => {
             { label: "Estimated Amount", value: numberToCurrency(damage.damage_part_cost + damage.service_charge) },
           ]
         }),
-        amountPaidToTechnician: estimate.amount_paid_to_technician,
+        amountPaidToTechnician: estimate.expected_earning,
         isTechnicianPaid: estimate.is_technician_paid,
+        totalDamagedParts: estimate.total_damaged_parts,
       }
 
       estimateDetails.value = details
@@ -84,7 +86,7 @@ watch(() => open.value, getEstimateDetails)
         <div class="pt-7 pb-8 bg-white max-lg:px-5">
           <Skeleton v-if="isLoading" class="w-[100px] h-3" />
           <h3 v-else class="text-gray-500 text-sm leading-[18px]">
-            {{ estimateDetails?.damageDetails?.length }} Damage part{{ Number(estimateDetails?.damageDetails?.length ?? 0) > 1 ? "s" : "" }}
+            {{ estimateDetails?.totalDamagedParts }} Damage part{{ Number(estimateDetails?.totalDamagedParts ?? 0) > 1 ? "s" : "" }}
           </h3>
 
           <div class="mt-4 space-y-3">
@@ -103,7 +105,7 @@ watch(() => open.value, getEstimateDetails)
                   :value="value"
                   class="last:text-right group"
                   label-class="group-even:text-center"
-                  value-class="group-last:text-mca truncate group-even:font-medium"
+                  value-class="group-last:text-mca group-even:text-center truncate group-even:font-medium"
                 />
               </div>
             </template>

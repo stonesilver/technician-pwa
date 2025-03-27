@@ -37,7 +37,7 @@ export default defineNuxtConfig({
     srcDir: "./service-worker",
     filename: "sw.ts",
     manifest: {
-      id: "/?v=0.0.3",
+      id: "/?v=0.0.4",
       name: "Auto Quote Estimator",
       short_name: "MyCover.ai",
       description:

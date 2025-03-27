@@ -16,7 +16,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       const isAuth = isTokenValid()
 
       if (isAuth) {
-        const path = from.fullPath === "/" ? "/app/dashboard" : from.fullPath
+        const path = ["/", "/app/account"].includes(from.fullPath) ? "/app/dashboard" : from.fullPath
         return navigateTo(path)
       }
     }

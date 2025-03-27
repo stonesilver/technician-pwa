@@ -12,6 +12,17 @@ export const LoginYupSchema = yup.object({
   domain: yup.string().optional().default("technician"),
 })
 
+export const ForgotPasswordSchema = yup.object({
+  phone_number: yup
+    .string()
+    .required("Enter your whatsapp number")
+    .test("validate-phone-number", "Enter a valid phone number", (value) => {
+      return /^(0[789][01]\d{8})$/.test(value)
+    }),
+  username: yup.string().email().required("Enter your e-mail address"),
+  domain: yup.string().optional().default("technician"),
+})
+
 export const ProvideEstimateSchema = yup.object({
   damage_part_cost: yup
     .string()
@@ -83,6 +94,7 @@ export const AddBankSchema = yup.object().shape({
 
 export const LoginSchema = toTypedSchema(LoginYupSchema)
 export type LoginPayload = yup.InferType<typeof LoginYupSchema>
+export type ForgotPasswordPayload = yup.InferType<typeof ForgotPasswordSchema>
 export type ProvideEstimateSchemaContext = yup.InferType<typeof ProvideEstimateSchema>
 export type ChangePasswordContext = yup.InferType<typeof ChangePasswordSchema>
 export type UserSchemaContext = yup.InferType<typeof UserSchema>

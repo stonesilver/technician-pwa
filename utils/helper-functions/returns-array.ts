@@ -12,7 +12,7 @@ export const formatSubmittedEstimate = (estimates: SubmittedEstimateContext["est
           value: `${subEst.total_damaged_parts} Damage parts`,
         },
         columnTwo: {
-          label: numberToCurrency(subEst.amount_paid_to_technician),
+          label: numberToCurrency(subEst.expected_earning),
           value: Dayjs(subEst.created_at).format("Do MMMM YYYY"),
           labelClass: subEst.is_technician_paid ? "text-mca" : "text-warning-500",
         },

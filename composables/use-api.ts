@@ -1,3 +1,5 @@
+import { logoutUser } from "~/utils/helper-functions/returns-void.ts"
+
 export const useApi = () => {
   const nuxtApp = useNuxtApp()
 
@@ -13,10 +15,12 @@ export const useApi = () => {
       if (response._data.data) response._data = response._data.data
     },
     async onResponseError({ response, options }) {
-      if (response.status === 401) {
+      if (response.status === 401 || response._data?.responseText === "Authenticated user not found") {
+        logoutUser()
         const route = useRoute()
         const callback = route.query?.callback ? route.query.callback : "/app/dashboard"
-        await nuxtApp.runWithContext(() => navigateTo({ path: "/", query: { callback } }, { replace: true }))
+        await navigateTo({ path: "/", query: { callback } }, { replace: true })
+        return
       }
 
       const errorStatus = options.headers.get("show-error")

@@ -97,7 +97,7 @@ const {
             class="w-full h-12 mt-[19px] bg-gray-100 rounded-lg flex items-center justify-between p-[11px_14px]"
           >
             <shared-list-item
-              label="fix"
+              :label="submittedEstimates[item.index].type"
               :value="numberToCurrency(currencyToNumber(submittedEstimates[item.index].damage_part_cost))"
               label-class="leading-none text-gray-400 capitalize"
               value-class="text-mca leading-none mt-[2px]"
@@ -160,9 +160,7 @@ const {
 
     <shared-the-modal v-model="modals.doLater" :dismissible="false">
       <template #content>
-        <div class="size-[34px] rounded-full mx-auto center-item ring-[12px] bg-warning-500 ring-warning-50">
-          <shared-icon name="exclamation-mark" class-name="[&>g]:fill-white size-6" />
-        </div>
+        <shared-modal-icon type="warning" />
 
         <p class="text-center text-secondary-3 text-xl font-semibold mt-4">Do This Later</p>
 
@@ -192,9 +190,7 @@ const {
 
     <shared-the-modal v-model="modals.sessionExpired" :dismissible="false">
       <template #content>
-        <div class="size-[34px] rounded-full mx-auto center-item ring-[12px] bg-warning-500 ring-warning-50">
-          <shared-icon name="exclamation-mark" class-name="[&>g]:fill-white size-6" />
-        </div>
+        <shared-modal-icon type="warning" />
 
         <p class="text-center text-secondary-3 text-xl font-semibold mt-4">Session expired</p>
 
@@ -213,9 +209,7 @@ const {
 
     <shared-the-modal v-model="modals.estimateSubmitted" :dismissible="false" content-class="py-9">
       <template #content>
-        <div class="size-[34px] rounded-full mx-auto center-item ring-[12px] bg-success-500 ring-success-50">
-          <shared-icon name="check" />
-        </div>
+        <shared-modal-icon type="check" />
 
         <p class="text-center text-secondary-3 text-xl font-semibold mt-4">Estimate Submitted</p>
 

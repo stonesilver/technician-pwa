@@ -18,7 +18,7 @@ const canGoBack = computed(() => {
       <shared-icon
         v-if="typeof canGoBack === 'string' && canGoBack === 'yes'"
         name="arrow-right"
-        class="rotate-180 size-6 center-item"
+        class="rotate-180 size-6 center-item cursor-pointer"
         class-name="size-5 [&>path]:stroke-[#439687]"
         @click="go(-1)"
       />
@@ -26,7 +26,8 @@ const canGoBack = computed(() => {
       <layout-the-hamburger v-if="!['Provide estimate'].includes(titleTag) && !canGoBack" v-model="checked" />
 
       <p class="flex-1 text-gray-900 font-medium text-xl">{{ titleTag }}</p>
-      <div class="w-[95px] flex gap-3.5">
+
+      <div v-if="route.meta.layout === 'default'" class="w-[95px] flex gap-3.5">
         <div class="size-[38px] rounded-full center-item bg-gray-100 border">
           <shared-icon name="bell" class="translate-y-[3px]" />
           <span class="size-[6.81px] bg-error-500 rounded-full z-[1]" />

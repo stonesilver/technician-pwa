@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import type { LoginPayload } from "~/utils/yup-schemas"
-import { LoginSchema } from "~/utils/yup-schemas"
+import { type LoginPayload, LoginSchema } from "~/utils/yup-schemas"
 import { type SubmissionHandler } from "vee-validate"
 import { welcomeBackMessage } from "~/utils/helper-functions/returns-string.ts"
 import type { TechnicianContext, UserContext } from "~/types/auth"
@@ -75,6 +74,8 @@ const handleLogin: SubmissionHandler<LoginPayload, any> = async (values: LoginPa
             <shared-password-input :field="field" />
           </shared-form-field>
         </div>
+
+        <nuxt-link to="/forgot-password" class="text-base leading-none mt-3 block ml-auto text-gray-700 font-medium w-fit">Forgot Password</nuxt-link>
 
         <Button class="mt-28" :is-loading="isLoading" :disabled="isLoading">Continue</Button>
       </vee-form>

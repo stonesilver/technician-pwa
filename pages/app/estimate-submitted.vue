@@ -1,50 +1,16 @@
 <script lang="ts" setup>
 definePageMeta({ layout: "default", titleTag: "Estimate" })
 
-import type { TechnicianContext } from "~/types/auth"
-import type { EstimatesStats, SubmittedEstimateContext } from "~/types/estimates"
-import { formatSubmittedEstimate } from "~/utils/helper-functions/returns-array"
 import { numberToCurrency } from "~/utils/helper-functions/returns-string.ts"
 
-const technician = useState<TechnicianContext>("technician")
-const { data: submittedEstimates, status } = useCustomFetch<SubmittedEstimateContext>(getSubmittedEstimatesUrl, {
-  headers: { "show-error": "400" },
-  dedupe: "cancel",
-  server: false,
-})
+const { submittedEstimates, estimates, status, statState } = useEstimateSubmitted()
 
 const openModal = reactive({ open: false, id: "" })
-const statState = reactive<{ stat: EstimatesStats | null; isLoading: boolean }>({ stat: null, isLoading: true })
-
-const estimates = computed(() => {
-  return formatSubmittedEstimate(submittedEstimates.value?.estimates)
-})
-
-const getEstimates = async () => {
-  try {
-    statState.isLoading = true
-    const res = await useApi()<EstimatesStats>(`${getEstimatesStatUrl}${technician.value?.id}`, { headers: { "show-error": "400" } })
-    statState.stat = res
-  } catch (error) {
-  } finally {
-    statState.isLoading = false
-  }
-}
 
 const handleViewEstimateDetail = (id: string) => {
   openModal.id = id
   openModal.open = true
 }
-
-watch(
-  () => technician.value,
-  async (val) => {
-    if (!!val) {
-      getEstimates()
-    }
-  },
-  { immediate: true }
-)
 </script>
 
 <template>

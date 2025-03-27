@@ -45,7 +45,7 @@ export type SubmittedEstimateContext = {
   estimates: {
     id: string
     is_technician_paid: boolean
-    amount_paid_to_technician: string
+    expected_earning: string
     created_at: string
     total_damaged_parts: number
     claim: { id: string; policy: { meta: { mca_payload: Record<string, string> } }; product: { route_name: string } }
@@ -55,7 +55,7 @@ export type SubmittedEstimateContext = {
 export type OneSubmittedEstimateContext = {
   id: string
   is_technician_paid: boolean
-  amount_paid_to_technician: string
+  expected_earning: string
   total_estimate_cost: string
   created_at: string
   total_damaged_parts: number

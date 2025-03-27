@@ -2,8 +2,7 @@
 definePageMeta({ layout: "default", titleTag: "Overview" })
 
 import type { TechnicianContext } from "~/types/auth"
-import type { OpenEstimateContext, PendingEstimateListContext, SubmittedEstimateContext } from "~/types/estimates"
-import { formatSubmittedEstimate } from "~/utils/helper-functions/returns-array"
+import type { OpenEstimateContext, PendingEstimateListContext } from "~/types/estimates"
 import { unifyVehicleDetails } from "~/utils/helper-functions/returns-object"
 import { numberToCurrency } from "~/utils/helper-functions/returns-string.ts"
 
@@ -15,12 +14,7 @@ const { data: openEstimates } = useCustomFetch<OpenEstimateContext[]>(getOpenEst
   server: false,
 })
 
-const { data: submittedEstimates, status } = useCustomFetch<SubmittedEstimateContext>(getSubmittedEstimatesUrl, {
-  headers: { "show-error": "400" },
-  query: { page: 1, limit: 10 },
-  dedupe: "cancel",
-  server: false,
-})
+const { submittedEstimates, estimates, status, statState } = useEstimateSubmitted()
 
 const { data: walletBalance, status: walletStatus } = useCustomFetch<{ balance_withdrawable: string }>(getWalletBalanceUrl, {
   headers: { "show-error": "400" },
@@ -57,10 +51,6 @@ const handleWithdrawalOnClick = () => {
   }
 }
 
-const recentEstimates = computed(() => {
-  return formatSubmittedEstimate(submittedEstimates.value?.estimates)
-})
-
 const technician = useState<TechnicianContext>("technician")
 </script>
 
@@ -89,8 +79,7 @@ const technician = useState<TechnicianContext>("technician")
           <h3 class="max-[375px]:text-xs text-sm text-gray-400 text-right">Total Earnings</h3>
           <Skeleton v-if="walletStatus === 'pending'" class="w-[80px] h-4 ml-auto mt-1" />
           <p v-else class="text-gray-800 font-medium text-sm lg:text-2xl leading-[160%] text-right">
-            <!-- {{ submittedEstimates?.total_results ?? "0" }} -->
-            ₦500,000
+            {{ numberToCurrency(statState.stat?.total_amount_paid ?? "0") }}
           </p>
         </div>
       </div>
@@ -128,7 +117,7 @@ const technician = useState<TechnicianContext>("technician")
         <template v-else>
           <shared-estimate-submitted-card
             v-if="!!submittedEstimates?.total_results"
-            v-for="item in recentEstimates"
+            v-for="item in estimates"
             :key="item.id"
             :column-one="item.columnOne"
             :column-two="item.columnTwo"

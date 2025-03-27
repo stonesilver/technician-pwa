@@ -8,8 +8,8 @@ const technician = defineModel<TechnicianContext>("technician")
 const isLoading = ref(false)
 
 const formFields = [
-  { model: "password", label: "Enter password" },
-  { model: "new_password", label: "Confirm password" },
+  { model: "password", label: "Enter old password" },
+  { model: "new_password", label: "Enter new password" },
 ]
 
 const handleSubmit: SubmissionHandler<ChangePasswordContext, any> = async (body: ChangePasswordContext) => {
@@ -34,9 +34,7 @@ const handleSubmit: SubmissionHandler<ChangePasswordContext, any> = async (body:
   <shared-the-modal v-model="open" :dismissible="false">
     <template #content>
       <div class="max-h-[70vh]">
-        <div class="size-[34px] rounded-full mx-auto center-item ring-[12px] bg-warning-500 ring-warning-50">
-          <shared-icon name="exclamation-mark" class-name="[&>g]:fill-white size-6" />
-        </div>
+        <shared-modal-icon type="warning" />
 
         <p class="text-center text-secondary-3 leading-none text-xl font-semibold mt-[26px]">Secure Your Account</p>
 

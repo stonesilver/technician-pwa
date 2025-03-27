@@ -7,8 +7,8 @@ const open = defineModel<boolean>()
 const isLoading = ref(false)
 
 const formFields = [
-  { model: "password", label: "Enter password" },
-  { model: "new_password", label: "Confirm password" },
+  { model: "password", label: "Enter old password" },
+  { model: "new_password", label: "Enter new password" },
 ]
 
 const handleSubmit: SubmissionHandler<ChangePasswordContext, any> = async (body: ChangePasswordContext) => {
