@@ -153,12 +153,7 @@ export default defineNuxtConfig({
   },
   vite: {
     server: {
-      allowedHosts: [
-        "localhost",
-        "127.0.0.1",
-        "25e6-102-89-42-103.ngrok-free.app", // Add your Ngrok domain here
-        "*",
-      ],
+      allowedHosts: ["localhost", "127.0.0.1", "25e6-102-89-42-103.ngrok-free.app", "*"],
     },
   },
 })

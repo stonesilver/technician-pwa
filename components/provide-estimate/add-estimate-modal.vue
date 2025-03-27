@@ -20,7 +20,7 @@ const observer = ref<IntersectionObserver>()
 
 const selectOptions = [
   { label: "Replacement", value: "Replacement" },
-  { label: "Fixing", value: "Fixing" },
+  { label: "Fixing", value: "Fix" },
 ]
 
 const images = computed(() => {
@@ -68,7 +68,7 @@ watch(
 </script>
 
 <template>
-  <shared-responsive-modal v-model="open" title="Provide Estimate" title-class="text-base text-secondary-3">
+  <shared-responsive-modal v-model="open" title="Provide Estimate" title-class="text-base text-secondary-3" :dismissible="false">
     <template #content>
       <div class="max-lg:px-5 max-h-[75vh] overflow-y-auto pb-[47px]">
         <div class="size-fit relative">
@@ -79,9 +79,9 @@ watch(
             <img
               ref="partsRef"
               v-for="({ label, src }, index) in images"
-              :key="index"
+              :key="label"
               :src="src"
-              alt=""
+              :alt="label"
               class="object-cover block size-full snap-start"
               :data-index="index"
             />

@@ -26,7 +26,7 @@ export type DamageEstimateContext = {
   damage_part: string
   damage_part_cost: string
   service_charge: string
-  type: "Replacement" | "Fixing" | ""
+  type: "Replacement" | "Fix" | ""
   index: number
 }
 

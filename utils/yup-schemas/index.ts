@@ -25,7 +25,7 @@ export const ProvideEstimateSchema = yup.object({
     .test("must be greater than 0", "Must be greater than 0", (value) => {
       return parseFloat(value?.toString()?.replace(/,/g, "")) > 0
     }),
-  type: yup.string().oneOf(["Replacement", "Fixing"], 'Must be "Replacement" or "Fixing"').required("Type is required"),
+  type: yup.string().oneOf(["Replacement", "Fix"], 'Must be "Replacement" or "Fixing"').required("Type is required"),
 })
 
 export const ChangePasswordSchema = yup.object({
