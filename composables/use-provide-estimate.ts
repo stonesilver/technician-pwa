@@ -140,8 +140,6 @@ export const useProvideEstimate = () => {
       return cloneEstimate as DamageEstimateContext
     })
 
-    console.log({ damage_estimates })
-    return
     const body = { claim_id: data.value?.claim.id, damage_estimates }
 
     try {
