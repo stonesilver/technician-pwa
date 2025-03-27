@@ -13,4 +13,16 @@ export default defineNuxtPlugin((nuxtApp) => {
       }
     },
   })
+  nuxtApp.vueApp.directive("number", {
+    mounted(el, binding) {
+      if (el.value && binding.value) {
+        el.value = el.value?.toString()?.replace(/\D/g, "")
+      }
+    },
+    updated(el, binding) {
+      if (binding.value) {
+        el.value = el.value?.toString()?.replace(/\D/g, "")
+      }
+    },
+  })
 })

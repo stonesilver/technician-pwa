@@ -1,18 +1,29 @@
 <script lang="ts" setup>
 const checked = ref(false)
 const route = useRoute()
+const { go } = useRouter()
 
 const titleTag = computed(() => {
   return (route.meta?.titleTag ?? "") as string
 })
+
+const canGoBack = computed(() => {
+  return (route.meta?.goBack ?? "") as string
+})
 </script>
 
 <template>
-  <header
-    class="border-b-[0.6px] bg-white z-[5] border-b-gray-200 shadow-[0_1px_4px_0_#11111105] py-[18px] px-5 sticky top-0"
-  >
+  <header class="border-b-[0.6px] bg-gray-50 z-[5] border-b-gray-200 shadow-[0_1px_4px_0_#11111105] py-[18px] px-5 sticky top-0">
     <nav class="min-h-[38px] flex items-center gap-[15px]">
-      <layout-the-hamburger v-if="!['Provide estimate'].includes(titleTag)" v-model="checked" />
+      <shared-icon
+        v-if="typeof canGoBack === 'string' && canGoBack === 'yes'"
+        name="arrow-right"
+        class="rotate-180 size-6 center-item"
+        class-name="size-5 [&>path]:stroke-[#439687]"
+        @click="go(-1)"
+      />
+
+      <layout-the-hamburger v-if="!['Provide estimate'].includes(titleTag) && !canGoBack" v-model="checked" />
 
       <p class="flex-1 text-gray-900 font-medium text-xl">{{ titleTag }}</p>
       <div class="w-[95px] flex gap-3.5">

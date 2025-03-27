@@ -1,65 +1,97 @@
 <script lang="ts" setup>
 definePageMeta({ layout: "default", titleTag: "Overview" })
+
+import type { TechnicianContext } from "~/types/auth"
+import type { OpenEstimateContext, PendingEstimateListContext, SubmittedEstimateContext } from "~/types/estimates"
+import { formatSubmittedEstimate } from "~/utils/helper-functions/returns-array"
+import { unifyVehicleDetails } from "~/utils/helper-functions/returns-object"
 import { numberToCurrency } from "~/utils/helper-functions/returns-string.ts"
 
-const dummyTasks = [
-  "9955884e-900b-4b21-a672-384583ff1e91",
-  "57950d30-e5af-426b-90b3-cc17052ef2a1",
-  "527f77a5-7f7b-4f24-997f-f2d88f8a6f9d",
-  "04325ce7-9f6c-4824-b406-d5473a41b64e",
-]
+const pendingEstimates = ref<PendingEstimateListContext[]>([])
 
-const dummyPendingEstimates = [
-  {
-    id: "a6ab63cd-592b-4535-8b23-860ba8077630",
-    description: "Toyota Camry 2024 || Red",
-    totalDamages: 4,
-    provided: 1,
-  },
-  {
-    id: "e93db31c-4c06-4eb8-9bb3-304b360a8599",
-    description: "Honda Accord 2021 || Blue",
-    totalDamages: 4,
-    provided: 1,
-  },
-]
+const { data: openEstimates } = useCustomFetch<OpenEstimateContext[]>(getOpenEstimatesUrl, {
+  headers: { "show-error": "400" },
+  dedupe: "cancel",
+  server: false,
+})
+
+const { data: submittedEstimates, status } = useCustomFetch<SubmittedEstimateContext>(getSubmittedEstimatesUrl, {
+  headers: { "show-error": "400" },
+  query: { page: 1, limit: 10 },
+  dedupe: "cancel",
+  server: false,
+})
+
+const { data: walletBalance, status: walletStatus } = useCustomFetch<{ balance_withdrawable: string }>(getWalletBalanceUrl, {
+  headers: { "show-error": "400" },
+  dedupe: "cancel",
+  server: false,
+})
 
 const modals = reactive({ openWithdrawalModal: false, openPendingEstimatesModal: false })
-const hasEstimate = true
 
 const completePendingEstimateOnClick = async () => {
-  const count = 2
+  const count = Array.isArray(openEstimates.value) ? openEstimates.value.length : 0
 
-  if (count > 1) {
+  if (count > 1 && Array.isArray(openEstimates.value)) {
+    pendingEstimates.value = openEstimates.value?.map((pendingEst) => {
+      const vehicle = unifyVehicleDetails(pendingEst.vehicle_details, pendingEst.product_route_name)
+      return {
+        id: pendingEst.claim_id,
+        description: `${vehicle.vehicle_make} ${vehicle.vehicle_model} ${vehicle.year_of_manufacture} || ${vehicle.vehicle_color?.toLowerCase()}`,
+        provided: pendingEst.estimate_provided,
+        limit: pendingEst.submission_limit,
+      }
+    })
     modals.openPendingEstimatesModal = true
   } else {
-    await navigateTo("/app/provide-estimate")
+    await navigateTo({ path: "/app/provide-estimate", query: { q: openEstimates.value?.[0].claim_id } })
   }
 }
+
+const handleWithdrawalOnClick = () => {
+  if (walletBalance.value && parseFloat(walletBalance.value.balance_withdrawable) > 0) {
+    modals.openWithdrawalModal = true
+  } else {
+    useToast.error("You do not have any withdrawable earnings")
+  }
+}
+
+const recentEstimates = computed(() => {
+  return formatSubmittedEstimate(submittedEstimates.value?.estimates)
+})
+
+const technician = useState<TechnicianContext>("technician")
 </script>
 
 <template>
   <div>
     <shared-to-do-alert-card
-      text="You currently have an uncompleted repair estimate"
+      v-if="Array.isArray(openEstimates)"
+      :text="`You currently have ${openEstimates.length > 1 ? openEstimates.length : 'an'} uncompleted repair estimate`"
       action-text="Complete"
       class="mt-[22px]"
       @action="completePendingEstimateOnClick"
     />
-    <h1 class="text-lg text-gray-700 font-medium mt-[22px] leading-none">Welcome back Technician Ade</h1>
+    <h1 class="text-lg text-gray-700 font-medium mt-[22px] leading-none">Welcome back Technician {{ technician?.first_name ?? "" }}</h1>
 
     <div class="mt-7 bg-gray-50 border-[0.4px] border-purple-100 max-[375px]:px-3 px-[23px] sm:px-6 pt-[26px] pb-5">
       <div class="grid grid-cols-[1fr_auto] sm:grid-cols-2 gap-2">
         <div class="">
-          <h3 class="text-gray-500 max-[375px]:text-xs text-sm leading-none">Total Earnings</h3>
-          <p class="text-mca font-semibold max-[375px]:text-2xl text-[2rem] leading-none mt-3">
-            {{ numberToCurrency(400000) }}
+          <h3 class="text-gray-500 max-[375px]:text-xs text-sm leading-none">Withdrawable Earnings</h3>
+          <Skeleton v-if="walletStatus === 'pending'" class="w-[150px] h-8 mt-3" />
+          <p v-else class="text-mca font-semibold max-[375px]:text-2xl text-[2rem] leading-none mt-3">
+            {{ numberToCurrency(walletBalance?.balance_withdrawable ?? "0") }}
           </p>
         </div>
 
         <div class="bg-white py-[9px] max-[375px]:px-2 px-[19px]">
-          <h3 class="max-[375px]:text-xs text-sm text-gray-400">Total submitted</h3>
-          <p class="text-gray-800 font-medium text-sm lg:text-2xl leading-[160%] text-right">20</p>
+          <h3 class="max-[375px]:text-xs text-sm text-gray-400 text-right">Total Earnings</h3>
+          <Skeleton v-if="walletStatus === 'pending'" class="w-[80px] h-4 ml-auto mt-1" />
+          <p v-else class="text-gray-800 font-medium text-sm lg:text-2xl leading-[160%] text-right">
+            <!-- {{ submittedEstimates?.total_results ?? "0" }} -->
+            ₦500,000
+          </p>
         </div>
       </div>
 
@@ -67,7 +99,8 @@ const completePendingEstimateOnClick = async () => {
         <Button
           variant="default_light"
           class="h-[50px] w-full md:max-w-[289px] ml-auto rounded"
-          @click="modals.openWithdrawalModal = true"
+          :disabled="walletStatus === 'pending'"
+          @click="handleWithdrawalOnClick"
         >
           Withdraw Earnings
         </Button>
@@ -78,6 +111,7 @@ const completePendingEstimateOnClick = async () => {
       <div class="flex items-center justify-between">
         <h3 class="text-lg text-gray-900 font-semibold leading-none">Recent Estimate</h3>
         <nuxt-link
+          v-if="!!submittedEstimates?.total_results"
           to="/app/estimate-submitted"
           class="inline-flex gap-2 items-center leading-none text-lg text-mca font-medium"
         >
@@ -87,27 +121,36 @@ const completePendingEstimateOnClick = async () => {
       </div>
 
       <div class="mt-7">
-        <shared-estimate-submitted-card
-          v-if="hasEstimate"
-          v-for="item in dummyTasks"
-          :key="item"
-          :row-one="{ label: 'Toyota Camry 2024', value: '4 Damage parts' }"
-          :row-two="{ label: `${numberToCurrency(2500)} Earned`, value: '12th july 2024' }"
-        />
+        <div v-for="item in 4" :key="item" v-if="status === 'pending'">
+          <Skeleton class="w-full h-[65.5px] mt-1" />
+        </div>
 
-        <shared-no-result
-          v-else
-          title="No Estimate"
-          description="You currently do not have any estimate at the moment ,they will appear here when you have"
-        />
+        <template v-else>
+          <shared-estimate-submitted-card
+            v-if="!!submittedEstimates?.total_results"
+            v-for="item in recentEstimates"
+            :key="item.id"
+            :column-one="item.columnOne"
+            :column-two="item.columnTwo"
+          >
+            <template #middle>
+              <shared-list-item label="Status" label-class="text-center" class="w-fit">
+                <shared-badge :text="item.badge.label" :variant="item.badge.variant" class="mt-1" />
+              </shared-list-item>
+            </template>
+          </shared-estimate-submitted-card>
+
+          <shared-no-result
+            v-else
+            title="No Estimate"
+            description="You currently do not have any estimate at the moment ,they will appear here when you have"
+          />
+        </template>
       </div>
     </div>
 
     <wallet-withdraw-earning-modal v-model="modals.openWithdrawalModal" />
 
-    <dashboard-pending-estimates-modal
-      v-model="modals.openPendingEstimatesModal"
-      :pending-estimates="dummyPendingEstimates"
-    />
+    <dashboard-pending-estimates-modal v-model="modals.openPendingEstimatesModal" :pending-estimates="pendingEstimates" />
   </div>
 </template>

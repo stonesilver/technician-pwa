@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { cn } from "@/lib/utils"
 
-type Variant = "info"
+type Variant = "info" | "success"
 
 withDefaults(defineProps<{ text: string; variant?: Variant }>(), {
   variant: "info",
@@ -9,6 +9,7 @@ withDefaults(defineProps<{ text: string; variant?: Variant }>(), {
 
 const variants = {
   info: "border-warning-500 bg-warning-50 text-warning-500",
+  success: "border-primary-500 bg-primary-50 text-primary-500",
 }
 </script>
 

@@ -3,12 +3,13 @@ import type { LoginPayload } from "~/utils/yup-schemas"
 import { LoginSchema } from "~/utils/yup-schemas"
 import { type SubmissionHandler } from "vee-validate"
 import { welcomeBackMessage } from "~/utils/helper-functions/returns-string.ts"
-import type { UserContext } from "~/types/auth"
+import type { TechnicianContext, UserContext } from "~/types/auth"
 
 definePageMeta({ layout: "auth" })
 type LoginResponse = { token: string; user: UserContext }
 
 const isLoading = ref(false)
+const route = useRoute()
 
 const handleLogin: SubmissionHandler<LoginPayload, any> = async (values: LoginPayload) => {
   isLoading.value = true
@@ -21,9 +22,13 @@ const handleLogin: SubmissionHandler<LoginPayload, any> = async (values: LoginPa
   useToast.promise(res, {
     loading: "Checking credentials...",
     success: async ({ token, user }: LoginResponse) => {
-      localStorage.setItem("technician", token)
-      useState<UserContext>("technician", () => user)
-      await navigateTo("/app/provide-estimate?q=74ce2079-51a3-4278-aedc-296eaa969678")
+      localStorage.setItem("mca-tch", token)
+      useState<UserContext>("user", () => user)
+      const tech = await useApi()<TechnicianContext>(`${getTechnicianUrl}${user.id}`)
+      useState<TechnicianContext>("technician", () => tech)
+
+      const callback = route.query?.callback ? (route.query.callback as string) : "/app/dashboard"
+      await navigateTo(callback)
 
       isLoading.value = false
       await new Promise((resolve) =>

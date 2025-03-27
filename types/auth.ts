@@ -13,3 +13,24 @@ export type UserContext = {
   face_image: null
   active: boolean
 }
+
+export type TechnicianContext = {
+  id: string
+  category: string
+  specialty: string
+  first_name: string
+  last_name: string
+  phone_number: string
+  email: string
+  business_name: string
+  country: string
+  state: string
+  address: null | string
+  gender: "Male" | "Female"
+  date_of_birth: string
+  active: boolean
+  has_changed_password: boolean
+  logo_url: null | string
+  total_estimates: string
+  total_earnings: string
+}

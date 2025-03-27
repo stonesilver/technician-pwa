@@ -17,3 +17,11 @@ export type SelectProps = {
 }
 
 export type IconProps = { name: string | undefined; className?: HTMLAttributes["class"] }
+
+export type VehicleDetails = {
+  vehicle_category: string
+  vehicle_color: string
+  vehicle_make: string
+  vehicle_model: string
+  year_of_manufacture: string
+}

@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-type PendingContext = { id: string; description: string; totalDamages: number; provided: number }
-defineProps<{ pendingEstimates: PendingContext[] }>()
+import type { PendingEstimateListContext } from "~/types/estimates"
+
+defineProps<{ pendingEstimates: PendingEstimateListContext[] }>()
 const open = defineModel<boolean>({ default: false })
 
-const selected = ref<PendingContext | null>(null)
+const selected = ref<PendingEstimateListContext | null>(null)
 
 const handleProceed = async () => {
   if (!selected.value) return
@@ -25,15 +26,12 @@ const handleProceed = async () => {
               :class="selected?.id === item.id ? 'ring-mca' : 'ring-transparent'"
               @click="selected = item"
             >
-              <p
-                class="text-base font-semibold leading-[24px]"
-                :class="selected?.id === item.id ? 'text-mca' : 'text-gray-600'"
-              >
+              <p class="text-base font-semibold leading-[24px]" :class="selected?.id === item.id ? 'text-mca' : 'text-gray-600'">
                 {{ item.description }}
               </p>
               <p class="text-xs">
                 Estimate provided
-                <span class="text-warning-500 font-medium">( {{ item.provided }} of {{ item.totalDamages }})</span>
+                <span class="text-warning-500 font-medium">( {{ item.provided }} of {{ item.limit }})</span>
               </p>
             </div>
           </template>
@@ -43,9 +41,7 @@ const handleProceed = async () => {
 
     <template #footer>
       <div class="max-lg:px-5 max-lg:pb-[30px] w-full">
-        <Button class="h-12 w-full rounded-[6.92px]" :disabled="selected === null" @click="handleProceed">
-          Continue
-        </Button>
+        <Button class="h-12 w-full rounded-[6.92px]" :disabled="selected === null" @click="handleProceed"> Continue </Button>
       </div>
     </template>
   </shared-responsive-modal>

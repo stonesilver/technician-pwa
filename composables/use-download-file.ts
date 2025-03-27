@@ -10,7 +10,8 @@ export const useDownloadFile = () => {
     }
 
     img.onerror = () => {
-      isDownloading.value = true
+      isDownloading.value = false
+      useToast.error("Failed to download image")
     }
 
     img.onload = function () {

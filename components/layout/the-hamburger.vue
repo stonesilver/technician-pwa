@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { UserContext } from "~/types/auth"
+import type { TechnicianContext } from "~/types/auth"
 
 const checked = defineModel({ default: false })
 const showContent = ref(false)
@@ -15,7 +15,7 @@ const routes = [
   { label: "Wallet", icons: { active: "wallet-filled", inactive: "wallet-outline" }, href: "/app/wallet" },
 ]
 
-const user = useState<UserContext>("technician")
+const technician = useState<TechnicianContext>("technician")
 
 watch(route, () => {
   showContent.value = false
@@ -62,8 +62,8 @@ watch(route, () => {
           >
             <div v-if="showContent" class="bg-white w-full max-w-[266px] h-full">
               <div class="h-[73px] border-b px-5 flex justify-center flex-col">
-                <p class="text-xl font-medium text-gray-800">{{ user.first_name }}</p>
-                <p class="text-gray-600 text-sm leading-[115%] capitalize">{{ user.user_type }}</p>
+                <p class="text-xl font-medium text-gray-800">{{ technician?.first_name ?? "" }}</p>
+                <p class="text-gray-600 text-sm leading-[115%] capitalize">{{ technician?.category ?? "" }}</p>
               </div>
 
               <div class="mt-10 px-5 space-y-[18px]">

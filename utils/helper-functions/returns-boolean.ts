@@ -1,6 +1,6 @@
 export const isTokenValid = () => {
   if (import.meta.client) {
-    const token = localStorage.getItem("technician")
+    const token = localStorage.getItem("mca-tch")
 
     if (!token) {
       return false

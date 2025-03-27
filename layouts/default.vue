@@ -1,15 +1,37 @@
 <script lang="ts" setup>
-import type { UserContext } from "~/types/auth"
+import type { TechnicianContext, UserContext } from "~/types/auth"
+// import { logoutUser } from "~/utils/helper-functions/returns-void.ts"
+
+const technician = useState<TechnicianContext>("technician")
+const isFirstTimeLogin = computed(() => technician.value && !technician.value.has_changed_password)
+const loading = ref(!technician.value)
 
 onMounted(async () => {
-  if (!useState("technician").value) {
+  const user = useState<UserContext>("user")
+
+  if (!user.value || !technician.value) {
     try {
-      const { user } = await useApi()<{ user: UserContext }>(getUserUrl, { retry: 5, retryDelay: 5000 })
-      useState<UserContext>("technician", () => user)
+      loading.value = true
+      if (!user.value) {
+        const res = await useApi()<{ user: UserContext }>(getUserUrl, { retry: 5, retryDelay: 5000 })
+        useState<UserContext>("user", () => res.user)
+      }
+
+      if (!technician.value) {
+        loading.value = true
+        const tech = await useApi()<TechnicianContext>(`${getTechnicianUrl}${user.value.id}`)
+        useState<TechnicianContext>("technician", () => tech)
+      }
     } catch (error) {
-      useToast.error(error as string)
-      localStorage.removeItem("technician")
-      return navigateTo("/")
+      // useToast.error(error as string)
+      // logoutUser()
+      // const route = useRoute()
+      // const callback = route.query?.callback ? route.query.callback : "/app/dashboard"
+
+      // return navigateTo({ path: "/", query: { callback } }, { replace: true })
+      showError({ status: 400, message: error + "" })
+    } finally {
+      loading.value = false
     }
   }
 })
@@ -17,9 +39,18 @@ onMounted(async () => {
 
 <template>
   <div id="app-layout" class="w-full relative max-w-3xl mx-auto flex flex-col bg-white flex-1">
+    <div v-if="loading" class="fixed inset-0 bg-white h-full w-full z-[10] center-item">
+      <shared-icon name="mca" class-name="size-24 animate-pulse" />
+    </div>
+
+    <!-- <template v-else> -->
     <layout-the-nav-bar />
+
     <div class="px-5 pb-12">
       <slot />
     </div>
+    <!-- </template> -->
+
+    <auth-first-time-login-modal v-model="isFirstTimeLogin" v-model:technician="technician" />
   </div>
 </template>

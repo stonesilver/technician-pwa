@@ -1,4 +1,5 @@
 import { isTokenValid } from "~/utils/helper-functions/returns-boolean"
+import { logoutUser } from "~/utils/helper-functions/returns-void.ts"
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   if (import.meta.client) {
@@ -6,7 +7,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       const isAuth = isTokenValid()
 
       if (!isAuth) {
-        return navigateTo("/")
+        logoutUser()
+        return navigateTo({ path: "/", query: { callback: to.fullPath } }, { replace: true })
       }
     }
 
@@ -14,8 +16,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       const isAuth = isTokenValid()
 
       if (isAuth) {
-        const navigateUrl = from.fullPath === "/" ? "/app/dashboard" : from.fullPath
-        return navigateTo(navigateUrl)
+        const path = from.fullPath === "/" ? "/app/dashboard" : from.fullPath
+        return navigateTo(path)
       }
     }
   }

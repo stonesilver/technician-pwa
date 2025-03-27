@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { ProvideEstimateSchema } from "~/utils/yup-schemas"
 import { numberToCurrency } from "~/utils/helper-functions/returns-string.ts"
 import { currencyToNumber } from "~/utils/helper-functions/returns-number"
+import type { DamageEstimateContext } from "~/types/estimates"
 
 const {
   wrapperRef,
@@ -9,7 +9,6 @@ const {
   partsRef,
   handleProvideEstimate,
   handleAdd,
-  handleDownloadImage,
   addedCount,
   estimateTotalAmount,
   damages,
@@ -17,9 +16,10 @@ const {
   modals,
   active,
   selectedPart,
-  isDownloading,
   handleSubmitEstimate,
-  dummyVehicleDetails,
+  vehicleDetails,
+  isFetchingEstimateRequest,
+  isSubmitting,
 } = useProvideEstimate()
 </script>
 
@@ -28,27 +28,49 @@ const {
     <div class="mt-8 p-[17px_10px] md:p-[17px_16px] border-[0.4px] border-mca bg-primary-25">
       <p class="text-mca font-medium text-sm leading-none">Vehicle Information</p>
 
-      <div class="mt-3 grid grid-cols-[auto_auto] gap-2">
-        <shared-list-item v-for="(item, index) in dummyVehicleDetails" :key="index" v-bind="item" class="even:text-right" />
+      <div class="mt-3 grid grid-cols-[auto_auto] gap-x-5 gap-y-2">
+        <div v-for="item in 5" :key="item" v-if="isFetchingEstimateRequest" class="even:flex even:flex-col even:items-end py-1">
+          <Skeleton class="h-[10.2px] w-full max-w-[140px] bg-primary-100/70 rounded-lg" />
+          <Skeleton class="h-[10.2px] w-full max-w-[88px] bg-primary-100/70 mt-2 rounded-lg" />
+        </div>
+
+        <shared-list-item v-else v-for="(item, index) in vehicleDetails" :key="index" v-bind="item" class="even:text-right" />
       </div>
     </div>
+
     <div class="mt-14">
       <div
         ref="wrapperRef"
-        class="no-scrollbar max-md:w-[calc(100%+20px)] w-full overflow-x-auto snap-x snap-mandatory scroll-smooth grid grid-flow-col gap-3 auto-cols-[85%] md:auto-cols-[295px]"
+        class="no-scrollbar max-md:w-[calc(100%+20px)] w-full overflow-x-auto snap-x snap-mandatory scroll-smooth grid grid-flow-col gap-3"
+        :class="[damages.length === 1 ? 'auto-cols-[98%] md:auto-cols-[80%]' : damages.length >= 2 ? 'auto-cols-[85%] md:auto-cols-[295px]' : '']"
       >
         <div
+          v-if="isFetchingEstimateRequest"
+          v-for="item in 5"
+          :key="item"
+          class="min-h-[469px] w-[85vw] md:w-[295px] bg-gray-50 snap-start p-[11px_12px] rounded"
+        >
+          <shared-image-loader class="h-[342px]" />
+          <div class="flex items-center justify-between gap-5">
+            <Skeleton class="h-[16px] w-[59.7px] bg-gray-200 rounded-lg mt-[18px]" />
+            <Skeleton class="h-[21px] bg-warning-50 w-2/3 border-[0.5px] border-warning-500 rounded-lg mt-[18px]" />
+          </div>
+          <Skeleton class="h-12 rounded-lg mt-[19px]" />
+        </div>
+
+        <div
+          v-else
           v-for="(item, index) in damages"
-          :key="item.side"
+          :key="item.damage_area + item.damage_part"
           ref="partsRef"
-          class="h-[469px] bg-gray-50 snap-start p-[11px_12px] rounded"
+          class="min-h-[469px] bg-gray-50 snap-start p-[11px_12px] rounded"
           :data-index="index"
         >
           <div class="relative w-full">
             <nuxt-img
               v-slot="{ src, isLoaded, imgAttrs }"
-              :src="item.image"
-              :alt="item.side"
+              :src="item.close_range"
+              :alt="item.damage_area"
               class="h-[342px] object-cover block rounded-[3.68px] bg-gray-200"
               :custom="true"
             >
@@ -65,9 +87,9 @@ const {
             />
           </div>
 
-          <div class="mt-[18px] flex justify-between items-center gpa-2">
-            <p class="text-sm leading-[18px] font-medium text-mca">Damage {{ index + 1 }}</p>
-            <shared-badge :text="item.side" />
+          <div class="mt-[18px] flex justify-between items-center gap-4">
+            <p class="text-sm leading-[18px] font-medium text-mca flex-shrink-0">Damage {{ index + 1 }}</p>
+            <shared-badge :text="`${item.damage_area} damage || ${item.damage_part}`" class="max-w-[70%] p-[4px_12px]" />
           </div>
 
           <div
@@ -75,10 +97,14 @@ const {
             class="w-full h-12 mt-[19px] bg-gray-100 rounded-lg flex items-center justify-between p-[11px_14px]"
           >
             <shared-list-item
-              v-for="(value, key) in submittedEstimates[item.index]"
-              :key="key"
-              :label="key"
-              :value="numberToCurrency(currencyToNumber(value))"
+              label="fix"
+              :value="numberToCurrency(currencyToNumber(submittedEstimates[item.index].damage_part_cost))"
+              label-class="leading-none text-gray-400 capitalize"
+              value-class="text-mca leading-none mt-[2px]"
+            />
+            <shared-list-item
+              label="Workmanship"
+              :value="numberToCurrency(currencyToNumber(submittedEstimates[item.index].service_charge))"
               label-class="leading-none text-gray-400 capitalize"
               value-class="text-mca leading-none mt-[2px]"
             />
@@ -99,8 +125,8 @@ const {
 
       <div class="mt-11 w-fit mx-auto flex gap-1">
         <span
-          v-for="(item, index) in damages"
-          :key="item.side"
+          v-for="(item, index) in damages.length || 4"
+          :key="item"
           class="block rounded-full h-2 bg-gray-200 transition-all duration-200"
           :class="index === active ? 'w-10' : 'w-2'"
         />
@@ -117,72 +143,20 @@ const {
     <shared-info-card text="Please ensure that the repair estimate is accurate and aligns with the current market rates" class="my-[26px]" />
 
     <div ref="submitRef" class="pb-6 grid grid-cols-[auto_1fr] gap-3.5">
-      <Button variant="secondary_soft" class="h-14" @click="modals.doLater = true">Do this later</Button>
-      <Button class="h-14" @click="handleSubmitEstimate">{{ addedCount }} of 5</Button>
+      <Button variant="secondary_soft" class="h-14" :disabled="isFetchingEstimateRequest || isSubmitting" @click="modals.doLater = true">
+        Do this later
+      </Button>
+      <Button class="h-14" :disabled="isFetchingEstimateRequest || isSubmitting" :is-loading="isSubmitting" @click="handleSubmitEstimate">
+        {{ addedCount }} of {{ damages.length }}
+      </Button>
     </div>
 
-    <shared-responsive-modal v-model="modals.provideEstimate" title="Provide Estimate" title-class="text-base text-secondary-3">
-      <template #content>
-        <div class="max-lg:px-5 max-h-[75vh] overflow-y-auto pb-[47px]">
-          <div class="h-[251px] overflow-hidden mt-4">
-            <img :src="selectedPart?.image" alt="" class="object-cover size-full" />
-          </div>
-
-          <div class="mt-5 flex justify-between items-center gap-2">
-            <shared-badge :text="selectedPart?.side ?? ''" />
-            <Button
-              variant="ghost"
-              type="button"
-              :disabled="isDownloading"
-              class="text-sm hover:bg-success-50 leading-none font-medium !text-mca h-auto"
-              @click="handleDownloadImage(selectedPart?.image ?? '', selectedPart?.side ?? '')"
-            >
-              Download Damage
-            </Button>
-          </div>
-
-          <vee-form
-            id="provide-estimate"
-            class="mt-11 space-y-5 lg:px-[1px]"
-            :initial-values="submittedEstimates[selectedPart?.index as unknown as number]"
-            :validation-schema="ProvideEstimateSchema"
-            @submit="handleAdd"
-          >
-            <shared-form-field name="amount" label="Damage part amount" v-slot="{ field }">
-              <Input
-                type="text"
-                inputmode="numeric"
-                placeholder="E.g., ₦25,000"
-                autocomplete="off"
-                currency
-                :prepend-icon="{ name: 'naira', className: 'size-3 [&>path]:fill-gray-600' }"
-                v-bind="field"
-              />
-            </shared-form-field>
-
-            <shared-form-field name="workmanship" label="Workmanship" v-slot="{ field }">
-              <Input
-                type="text"
-                inputmode="numeric"
-                placeholder="Enter the estimated cost of repair"
-                autocomplete="off"
-                currency
-                :prepend-icon="{ name: 'naira', className: 'size-3 [&>path]:fill-gray-600' }"
-                v-bind="field"
-              />
-            </shared-form-field>
-          </vee-form>
-        </div>
-      </template>
-
-      <template #footer>
-        <div class="grid grid-cols-2 gap-3 w-full max-lg:pb-[30px] max-lg:px-4">
-          <Button variant="secondary_soft" type="button" class="h-12 rounded-[6.92px]" @click="modals.provideEstimate = false"> Cancel </Button>
-
-          <Button form="provide-estimate" class="h-12 rounded-[6.92px]">Save</Button>
-        </div>
-      </template>
-    </shared-responsive-modal>
+    <provide-estimate-add-estimate-modal
+      v-model="modals.provideEstimate"
+      :selected-part="(selectedPart as DamageEstimateContext) ?? {}"
+      :submitted-estimates="submittedEstimates"
+      @submit-estimate="handleAdd"
+    />
 
     <shared-the-modal v-model="modals.doLater" :dismissible="false">
       <template #content>
