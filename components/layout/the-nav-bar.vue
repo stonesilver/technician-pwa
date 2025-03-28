@@ -9,7 +9,7 @@ const titleTag = computed(() => {
 
 const canGoBack = computed(() => {
   const back = route.meta?.goBack as string
-  return typeof back === "string" && back === "true"
+  return typeof back === "string" && back === "yes"
 })
 
 const hideNavBar = computed(() => {
