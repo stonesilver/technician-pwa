@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     //   cert: "./localhost+2.pem",
     // },
   },
-  modules: ["@vite-pwa/nuxt", "@nuxt/image", "@nuxtjs/tailwindcss", "shadcn-nuxt", "@vee-validate/nuxt", "@nuxtjs/ngrok"],
+  modules: ["@vite-pwa/nuxt", "@nuxt/image", "@nuxtjs/tailwindcss", "shadcn-nuxt", "@vee-validate/nuxt"],
   veeValidate: {
     // disable or enable auto imports
     autoImports: true,
@@ -102,7 +102,7 @@ export default defineNuxtConfig({
         },
       ],
       scope: process.env.VITE_BASE_DOMAIN || "/",
-      start_url: "/?v=0.0.0",
+      start_url: "/",
       display: "standalone",
       background_color: "#ffffff",
       prefer_related_applications: true,
@@ -133,10 +133,6 @@ export default defineNuxtConfig({
     },
   },
   experimental: { appManifest: true },
-  ngrok: {
-    authtoken: process.env.NGROK_AUTH_TOKEN,
-    addr: 5177,
-  },
   vite: {
     server: {
       allowedHosts: ["localhost", "127.0.0.1", "25e6-102-89-42-103.ngrok-free.app", "*"],
