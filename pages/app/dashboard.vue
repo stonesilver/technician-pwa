@@ -57,7 +57,7 @@ const technician = useState<TechnicianContext>("technician")
 <template>
   <div>
     <shared-to-do-alert-card
-      v-if="Array.isArray(openEstimates)"
+      v-if="Array.isArray(openEstimates) && openEstimates.length"
       :text="`You currently have ${openEstimates.length > 1 ? openEstimates.length : 'an'} uncompleted repair estimate`"
       action-text="Complete"
       class="mt-[22px]"

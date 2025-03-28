@@ -35,6 +35,8 @@ onMounted(async () => {
     }
   }
 })
+
+// const { showModal, installPWA } = useInstallPwa()
 </script>
 
 <template>
@@ -50,5 +52,6 @@ onMounted(async () => {
     <!-- </template> -->
 
     <auth-first-time-login-modal v-model="isFirstTimeLogin" v-model:technician="technician" />
+    <!-- <layout-install-pwa-modal v-model="showModal" @install-pwa="installPWA" /> -->
   </div>
 </template>

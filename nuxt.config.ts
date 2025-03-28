@@ -32,12 +32,12 @@ export default defineNuxtConfig({
     componentDir: "./components/ui",
   },
   pwa: {
-    registerType: "prompt", // "autoUpdate", //
+    registerType: "autoUpdate", // "prompt",
     strategies: "injectManifest",
     srcDir: "./service-worker",
     filename: "sw.ts",
     manifest: {
-      id: "/?v=0.0.0",
+      id: "/?mca=0.0.0",
       name: "Auto Quote Estimator",
       short_name: "MyCover.ai",
       description:

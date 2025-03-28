@@ -5,7 +5,7 @@ defineEmits<{ (e: "install-pwa"): void }>()
 </script>
 
 <template>
-  <shared-the-modal v-model="open" :dismissible="false" content-class="py-6 rounded-xl max-w-[332px]">
+  <shared-the-modal v-model="open" dismissible content-class="py-6 rounded-xl max-w-[332px]">
     <template #content>
       <div class="text-center">
         <div class="size-[50px] rounded-full bg-success-50 mx-auto center-item">

@@ -121,7 +121,7 @@ watch(() => open.value, getEstimateDetails)
         <Skeleton v-if="isLoading" class="w-[40%] h-5" />
 
         <p v-else class="flex items-center gap-2 text-lg text-gray-800 font-semibold">
-          <span class="text-gray-500 font-normal text-sm">Earnings</span>
+          <span class="text-gray-500 font-normal text-sm">{{ !estimateDetails?.isTechnicianPaid ? "Pending" : "" }} Earning</span>
           {{ numberToCurrency(estimateDetails?.amountPaidToTechnician ?? "0") }}
         </p>
       </div>
