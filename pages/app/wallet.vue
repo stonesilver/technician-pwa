@@ -14,71 +14,6 @@ const { data: walletBalance, status } = useCustomFetch<{ balance_withdrawable: s
 const { data: transactions, status: transactionStatus } = useCustomFetch<WalletTransactions>(getWalletTransactionUrl, {
   headers: { "show-error": "400" },
   dedupe: "cancel",
-  transform: (data) => {
-    data.transactions = [
-      {
-        id: "cc716136-99f6-4787-be5f-1b77646f12fc",
-        reference_id: "TRN_LKSHBPEDIU1741248587805",
-        account_withdrawn_to: null,
-        type: "in",
-        source: "purchase profit",
-        status: "success",
-        amount: "2240.0000",
-        balance_before_transaction: "373248.2662",
-        balance_after_transaction: "365288.3190",
-        created_at: "2025-03-06T08:09:47.806Z",
-      },
-      {
-        id: "63a87c54-33fe-4ac9-9270-709c614ac117",
-        reference_id: "TRN_FCFBPECKGP1741248587449",
-        account_withdrawn_to: null,
-        type: "out",
-        source: "purchase",
-        status: "success",
-        amount: "28000.0000",
-        balance_before_transaction: "393288.3190",
-        balance_after_transaction: "365288.3190",
-        created_at: "2025-03-06T08:09:47.450Z",
-      },
-      {
-        id: "b9ea23d2-83ea-4311-8b50-5a7421feb673",
-        reference_id: "TRN_VTEEHCQLEY1741190314177",
-        account_withdrawn_to: null,
-        type: "in",
-        source: "purchase profit",
-        status: "success",
-        amount: "1800.0000",
-        balance_before_transaction: "399448.2662",
-        balance_after_transaction: "393288.3190",
-        created_at: "2025-03-05T15:58:34.178Z",
-      },
-      {
-        id: "085a7d19-d215-4e78-99c3-0809bcabfead",
-        reference_id: "TRN_GJJAPWYBIH1741190313810",
-        account_withdrawn_to: null,
-        type: "out",
-        source: "purchase",
-        status: "success",
-        amount: "22500.0000",
-        balance_before_transaction: "415788.3190",
-        balance_after_transaction: "393288.3190",
-        created_at: "2025-03-05T15:58:33.811Z",
-      },
-      {
-        id: "96ab73f6-dd67-44ab-9a94-42cb69af35ea",
-        reference_id: "TRN_TJEJALCVIL1741185663441",
-        account_withdrawn_to: null,
-        type: "in",
-        source: "purchase profit",
-        status: "success",
-        amount: "80.0000",
-        balance_before_transaction: "421868.2662",
-        balance_after_transaction: "415788.3190",
-        created_at: "2025-03-05T14:41:03.441Z",
-      },
-    ]
-    return data
-  },
   server: false,
 })
 
@@ -142,26 +77,34 @@ const handleWithdrawalOnClick = () => {
           <Skeleton class="w-full h-[65.5px] mt-3.5" />
         </div>
 
-        <shared-estimate-submitted-card
-          v-else
-          v-for="(item, index) in transactions?.transactions ?? []"
-          :key="index"
-          :column-one="{ label: item.type === 'in' ? 'Earnings' : 'Withdrawal', value: item.type === 'in' ? 'Inflow' : 'Outflow' }"
-          :column-two="{ label: `${numberToCurrency(item.amount)} Earned`, value: Dayjs(item.created_at).format('Do MMMM YYYY') }"
-          view-more
-          @view-more="handleViewTransactionDetails(item)"
-        >
-          <template #icon>
-            <div class="size-[38px] rounded center-item" :class="item.type === 'in' ? 'bg-success-50' : 'bg-error-50'">
-              <shared-icon
-                name="arrow-right"
-                :class-name="
-                  cn('size-[18px]', item.type === 'in' ? '[&>path]:stroke-success-500 -rotate-45' : '[&>path]:stroke-error-500 rotate-[135deg]')
-                "
-              />
-            </div>
-          </template>
-        </shared-estimate-submitted-card>
+        <template v-else>
+          <shared-estimate-submitted-card
+            v-if="Array.isArray(transactions?.transactions) && transactions.transactions.length"
+            v-for="(item, index) in transactions?.transactions ?? []"
+            :key="index"
+            :column-one="{ label: item.type === 'in' ? 'Earnings' : 'Withdrawal', value: item.type === 'in' ? 'Inflow' : 'Outflow' }"
+            :column-two="{ label: `${numberToCurrency(item.amount)} Earned`, value: Dayjs(item.created_at).format('Do MMMM YYYY') }"
+            view-more
+            @view-more="handleViewTransactionDetails(item)"
+          >
+            <template #icon>
+              <div class="size-[38px] rounded center-item" :class="item.type === 'in' ? 'bg-success-50' : 'bg-error-50'">
+                <shared-icon
+                  name="arrow-right"
+                  :class-name="
+                    cn('size-[18px]', item.type === 'in' ? '[&>path]:stroke-success-500 -rotate-45' : '[&>path]:stroke-error-500 rotate-[135deg]')
+                  "
+                />
+              </div>
+            </template>
+          </shared-estimate-submitted-card>
+
+          <shared-no-result
+            v-else
+            title="No Transaction"
+            description="You currently do not have any transaction at the moment, they will appear here when you have"
+          />
+        </template>
       </div>
     </shared-section-details-card>
 

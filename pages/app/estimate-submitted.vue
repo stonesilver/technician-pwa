@@ -22,7 +22,7 @@ const handleViewEstimateDetail = (id: string) => {
         <p v-else class="text-success-500 font-medium leading-[160%]">{{ numberToCurrency(statState.stat?.total_amount_paid ?? "0") }}</p>
       </div>
 
-      <div class="text-right">
+      <div class="text-right border-l border-l-gray-300">
         <p class="text-gray-400 leading-[160%]">Pending Earnings</p>
         <Skeleton v-if="statState.isLoading" class="w-[90px] h-4 mt-[3px] ml-auto" />
         <p v-else class="text-warning-500 font-medium leading-[160%]">{{ numberToCurrency(statState.stat?.total_expected_earning ?? "0") }}</p>
@@ -61,7 +61,7 @@ const handleViewEstimateDetail = (id: string) => {
           <shared-no-result
             v-else
             title="No Estimate"
-            description="You currently do not have any estimate at the moment ,they will appear here when you have"
+            description="You currently do not have any estimate at the moment, they will appear here when you have"
           />
         </template>
 

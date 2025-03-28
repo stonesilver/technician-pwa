@@ -45,6 +45,8 @@ const getEstimateDetails = async (val: boolean | undefined) => {
 
       estimateDetails.value = details
     } catch (error) {
+      useToast(error + "")
+      open.value = false
     } finally {
       isLoading.value = false
     }

@@ -37,7 +37,7 @@ export default defineNuxtConfig({
     srcDir: "./service-worker",
     filename: "sw.ts",
     manifest: {
-      id: "/?v=0.0.4",
+      id: "/?v=0.0.0",
       name: "Auto Quote Estimator",
       short_name: "MyCover.ai",
       description:
@@ -102,7 +102,7 @@ export default defineNuxtConfig({
         },
       ],
       scope: process.env.VITE_BASE_DOMAIN || "/",
-      start_url: "/",
+      start_url: "/?v=0.0.0",
       display: "standalone",
       background_color: "#ffffff",
       prefer_related_applications: true,
