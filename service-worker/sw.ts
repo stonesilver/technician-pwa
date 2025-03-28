@@ -16,9 +16,9 @@ precacheAndRoute([{ url: "/", revision: null }])
 // clean old assets
 cleanupOutdatedCaches()
 
-// let allowlist: undefined | RegExp[]
-// if (import.meta.env.DEV) allowlist = [/^\/$/]
-const allowlist: RegExp[] = [/^\/$/]
+let allowlist: undefined | RegExp[]
+if (import.meta.env.DEV) allowlist = [/^\/$/]
+// const allowlist: RegExp[] = [/^\/$/]
 
 // to allow work offline
 registerRoute(new NavigationRoute(createHandlerBoundToURL("/"), { allowlist }))

@@ -55,9 +55,8 @@ const handleLogin: SubmissionHandler<LoginPayload, any> = async (values: LoginPa
         <shared-icon name="repair-technician" />
       </div>
 
-      <p class="mt-[26px] text-xl text-secondary-3 text-center mx-auto max-w-[255px] leading-[22px] font-semibold">
-        Welcome to Technician Repair Portal
-      </p>
+      <!-- secondary-3 -->
+      <p class="mt-[26px] text-xl text-mca text-center mx-auto max-w-[255px] leading-[22px] font-semibold">Welcome to Technician Repair Portal</p>
 
       <vee-form
         class="max-w-[434px] mx-auto w-full flex flex-col justify-end pt-14"
