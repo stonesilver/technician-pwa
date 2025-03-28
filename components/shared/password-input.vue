@@ -13,21 +13,24 @@ const handleTypeSwitch = () => {
 </script>
 
 <template>
-  <div class="h-fit w-full relative flex items-center border rounded-lg bg-gray-gray">
+  <div class="h-fit w-full relative flex items-center border rounded-lg bg-gray-50">
     <Input
       :type="passwordIsVisible ? 'text' : 'password'"
       :placeholder="placeholder ?? 'Enter password'"
       autocomplete="off"
-      class="pr-10 bg-transparent"
-      :class="[!passwordIsVisible ? 'text-transparent' : undefined, inputClass]"
+      class="pr-10 bg-transparent caret-mca z-[1]"
+      :class="[
+        !passwordIsVisible ? 'text-transparent tracking-[2.5px] placeholder:tracking-normal text-lg placeholder:text-sm' : undefined,
+        inputClass,
+      ]"
       v-bind="field"
     >
       <template #append>
-        <shared-icon :name="passwordIsVisible ? 'eye' : 'eye-slash'" class="cursor-pointer" @click="handleTypeSwitch" />
+        <shared-icon :name="passwordIsVisible ? 'eye' : 'eye-slash'" class="cursor-pointer z-[2]" @click="handleTypeSwitch" />
       </template>
     </Input>
-    <span v-if="field?.value && !passwordIsVisible" class="absolute pl-4 pr-10 text-sm tracking-[-4px]">
-      {{ "＊".repeat(field?.value?.length) }}
+    <span v-if="field?.value && !passwordIsVisible" class="absolute pl-4 text-gray-600 text-sm tracking-[-4px] w-fit leading-none">
+      {{ "﹡".repeat(field?.value?.length) }}
     </span>
   </div>
 </template>

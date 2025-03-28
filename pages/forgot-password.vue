@@ -10,7 +10,7 @@ const formFields = [
   { model: "phone_number", label: "Whatsapp number", type: "tel", placeholder: "Enter whatsapp number", inputMode: "text" as const },
 ]
 
-const handleLogin: SubmissionHandler<ForgotPasswordPayload, any> = async (values: ForgotPasswordPayload) => {
+const handleInitiateRequest: SubmissionHandler<ForgotPasswordPayload, any> = async (values: ForgotPasswordPayload) => {
   try {
     state.loading = true
     const body = { ...values, domain: "technician" }
@@ -35,7 +35,7 @@ const handleLogin: SubmissionHandler<ForgotPasswordPayload, any> = async (values
         class="max-w-[434px] mx-auto w-full flex flex-col justify-end pt-14"
         autocomplete="off"
         :validation-schema="ForgotPasswordSchema"
-        @submit="handleLogin"
+        @submit="handleInitiateRequest"
       >
         <div class="flex-1 flex flex-col justify-center space-y-6">
           <shared-form-field
@@ -45,7 +45,14 @@ const handleLogin: SubmissionHandler<ForgotPasswordPayload, any> = async (values
             :label="formField.label"
             v-slot="{ field }"
           >
-            <Input :type="formField.type" :inputmode="formField.inputMode" :placeholder="formField.placeholder" autocomplete="off" v-bind="field" />
+            <Input
+              :type="formField.type"
+              :inputmode="formField.inputMode"
+              :placeholder="formField.placeholder"
+              :maxlength="formField.type === 'tel' ? 11 : undefined"
+              autocomplete="off"
+              v-bind="field"
+            />
           </shared-form-field>
         </div>
 

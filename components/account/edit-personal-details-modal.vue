@@ -33,7 +33,7 @@ const handleSubmit: SubmissionHandler<UserSchemaContext, any> = async (values: U
 <template>
   <shared-responsive-modal v-model="open" :dismissible="false">
     <template #content>
-      <div class="max-lg:px-5 max-h-[75vh] overflow-y-auto">
+      <div class="max-lg:px-5 max-h-[75vh] overflow-y-auto lg:px-[2px]">
         <div class="size-[50px] mx-auto bg-success-50 rounded-full center-item">
           <shared-icon name="padlock" />
         </div>

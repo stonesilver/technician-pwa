@@ -15,7 +15,7 @@ export const useApi = () => {
       if (response._data.data) response._data = response._data.data
     },
     async onResponseError({ response, options }) {
-      if (response.status === 401 || response._data?.responseText === "Authenticated user not found") {
+      if ((response.status === 401 && options.headers.has("Authorization")) || response._data?.responseText === "Authenticated user not found") {
         logoutUser()
         const route = useRoute()
         const callback = route.query?.callback ? route.query.callback : "/app/dashboard"
@@ -23,7 +23,7 @@ export const useApi = () => {
         return
       }
 
-      const errorStatus = options.headers.get("show-error")
+      const errorStatus = options.headers.has("show-error")
       if (errorStatus) {
         showError({ status: response.status, message: response._data?.responseText ?? "Oops!, an error occurred" })
       }

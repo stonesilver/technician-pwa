@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-definePageMeta({ layout: "default", titleTag: "Provide estimate" })
+definePageMeta({ layout: "default", titleTag: "Provide estimate", hideNavBar: "yes" })
 </script>
 
 <template>

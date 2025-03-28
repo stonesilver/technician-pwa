@@ -70,7 +70,7 @@ watch(
 <template>
   <shared-responsive-modal v-model="open" title="Provide Estimate" title-class="text-base text-secondary-3" :dismissible="false">
     <template #content>
-      <div class="max-lg:px-5 max-h-[75vh] overflow-y-auto pb-[47px]">
+      <div class="max-lg:px-5 max-h-[75vh] overflow-y-auto pb-[47px] lg:px-[1px]">
         <div class="size-fit relative">
           <div
             ref="wrapperRef"

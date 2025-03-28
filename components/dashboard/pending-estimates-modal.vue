@@ -16,13 +16,13 @@ const handleProceed = async () => {
 <template>
   <shared-responsive-modal v-model="open" title="Pending estimate" title-class="text-base text-warning-500">
     <template #content>
-      <div class="min-h-[190px] modal-content-max-height maxi-h-[70vh] overflow-y-auto pt-3 max-lg:px-5 pb-[47px]">
+      <div class="min-h-[190px] modal-content-max-height maxi-h-[70vh] overflow-y-auto pt-3 max-lg:px-5 pb-[47px] lg:px-[1px]">
         <p class="text-sm text-[#999CA0]">Select any of the repair estimate to proceed</p>
 
         <div class="mt-7 space-y-[18px]">
           <template v-for="item in pendingEstimates" :key="item.id">
             <div
-              class="flex flex-col justify-end min-h-[66px] bg-gray-50 rounded-[4.64px] px-[15px] py-2 ring-1"
+              class="flex flex-col justify-end min-h-[66px] bg-gray-50 rounded-[4.64px] px-[15px] py-2 ring-1 lg:cursor-pointer"
               :class="selected?.id === item.id ? 'ring-mca' : 'ring-transparent'"
               @click="selected = item"
             >

@@ -123,7 +123,7 @@ const {
         </div>
       </div>
 
-      <div class="mt-11 w-fit mx-auto flex gap-1">
+      <div class="mt-8 w-fit mx-auto flex gap-1">
         <span
           v-for="(item, index) in damages.length || 4"
           :key="item"
@@ -134,15 +134,15 @@ const {
     </div>
 
     <div
-      class="mt-24 h-20 border-t-[0.6px] border-t-success-500 bg-success-50 text-center center-item w-[calc(100%+40px)] max-md:-translate-x-5 md:w-full"
+      class="mt-12 h-20 border-t-[0.6px] border-t-success-500 lg:border-[0.6px] lg:border-success-500 bg-success-50 text-center center-item w-[calc(100%+40px)] max-md:-translate-x-5 md:w-full"
     >
       <p class="text-gray-500 text-sm leading-none font-medium">Total Estimate</p>
       <p class="text-2xl font-semibold text-gray-800 mt-[6px]">{{ numberToCurrency(estimateTotalAmount) }}</p>
     </div>
 
-    <shared-info-card text="Please ensure that the repair estimate is accurate and aligns with the current market rates" class="my-[26px]" />
+    <shared-info-card text="Please ensure that the repair estimate is accurate and aligns with the current market rates" class="my-8" />
 
-    <div ref="submitRef" class="pb-6 grid grid-cols-[auto_1fr] gap-3.5">
+    <div ref="submitRef" class="grid grid-cols-[auto_1fr] gap-3.5">
       <Button variant="secondary_soft" class="h-14" :disabled="isFetchingEstimateRequest || isSubmitting" @click="modals.doLater = true">
         Do this later
       </Button>

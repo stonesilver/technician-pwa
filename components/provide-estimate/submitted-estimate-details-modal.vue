@@ -83,13 +83,13 @@ watch(() => open.value, getEstimateDetails)
           </template>
         </div>
 
-        <div class="pt-7 pb-8 bg-white max-lg:px-5">
+        <div class="pt-7 pb-8 max-lg:bg-white max-lg:px-5">
           <Skeleton v-if="isLoading" class="w-[100px] h-3" />
           <h3 v-else class="text-gray-500 text-sm leading-[18px]">
             {{ estimateDetails?.totalDamagedParts }} Damage part{{ Number(estimateDetails?.totalDamagedParts ?? 0) > 1 ? "s" : "" }}
           </h3>
 
-          <div class="mt-4 space-y-3">
+          <div class="mt-2 space-y-3">
             <Skeleton v-for="item in 3" :key="item" v-if="isLoading" class="w-full h-[58.6px] rounded-sm" />
 
             <template v-else>
@@ -115,7 +115,7 @@ watch(() => open.value, getEstimateDetails)
     </template>
 
     <template #footer>
-      <div class="h-[58px] w-full bg-success-50 border-t-[0.4px] border-t-success-500 lg:pb-4 center-item">
+      <div class="h-[58px] w-full bg-success-50 border-t-[0.4px] border-t-success-500 lg:border lg:border-success-500 lg:mb-4 center-item">
         <Skeleton v-if="isLoading" class="w-[40%] h-5" />
 
         <p v-else class="flex items-center gap-2 text-lg text-gray-800 font-semibold">

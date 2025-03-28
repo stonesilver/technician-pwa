@@ -18,12 +18,23 @@ const { data: bankAccount, refresh } = useCustomFetch<{ bankAccounts: BankAccoun
   headers: { "show-error": "400" },
   dedupe: "cancel",
   server: false,
+  getCachedData(key, nuxtApp) {
+    return nuxtApp.payload.data[key] || nuxtApp.static.data[key]
+  },
 })
 
 onMounted(async () => {
   try {
-    const { banks } = await useApi()<{ banks: { name: string; code: string }[] }>(listBankUrl, { cache: "default" })
-    bankOptions.value = banks.map(({ code, name }) => ({ label: name, value: code }))
+    await useCustomFetch<{ banks: { name: string; code: string }[] }>(listBankUrl, {
+      transform: (data) => {
+        bankOptions.value = data.banks.map(({ code, name }) => ({ label: name, value: code }))
+        return data
+      },
+      getCachedData(key, nuxtApp) {
+        return nuxtApp.payload.data[key] || nuxtApp.static.data[key]
+      },
+      server: false,
+    })
   } catch (error) {}
 })
 

@@ -19,7 +19,7 @@ export const ForgotPasswordSchema = yup.object({
     .test("validate-phone-number", "Enter a valid phone number", (value) => {
       return /^(0[789][01]\d{8})$/.test(value)
     }),
-  username: yup.string().email().required("Enter your e-mail address"),
+  username: yup.string().email("Enter a valid email").required("Enter your email address"),
   domain: yup.string().optional().default("technician"),
 })
 
@@ -40,7 +40,7 @@ export const ProvideEstimateSchema = yup.object({
 })
 
 export const ChangePasswordSchema = yup.object({
-  password: yup.string().required("New password is required"),
+  password: yup.string().required("Enter your current password"),
   new_password: yup
     .string()
     .min(8, "Password must be at least 8 characters")
@@ -48,8 +48,22 @@ export const ChangePasswordSchema = yup.object({
     .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
     .matches(/[0-9]/, "Password must contain at least one number")
     .matches(/[\W_]/, "Password must contain at least one special character")
-    // .oneOf([yup.ref("password")], "Passwords must match")
-    .required("Confirm password is required"),
+    .required("Enter your new password"),
+})
+
+export const ResetPasswordSchema = yup.object({
+  password: yup
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .matches(/[0-9]/, "Password must contain at least one number")
+    .matches(/[\W_]/, "Password must contain at least one special character")
+    .required("Enter your new password"),
+  new_password: yup
+    .string()
+    .oneOf([yup.ref("password")], "Passwords must match")
+    .required("Enter your new password"),
 })
 
 export const UserSchema = yup.object({
@@ -95,6 +109,7 @@ export const AddBankSchema = yup.object().shape({
 export const LoginSchema = toTypedSchema(LoginYupSchema)
 export type LoginPayload = yup.InferType<typeof LoginYupSchema>
 export type ForgotPasswordPayload = yup.InferType<typeof ForgotPasswordSchema>
+export type ResetPasswordPayload = yup.InferType<typeof ResetPasswordSchema>
 export type ProvideEstimateSchemaContext = yup.InferType<typeof ProvideEstimateSchema>
 export type ChangePasswordContext = yup.InferType<typeof ChangePasswordSchema>
 export type UserSchemaContext = yup.InferType<typeof UserSchema>

@@ -17,6 +17,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
       if (isAuth) {
         const path = ["/", "/app/account"].includes(from.fullPath) ? "/app/dashboard" : from.fullPath
+        // if (from.fullPath === to.fullPath && history.length) {
+        //   return useRouter().back()
+        // }
+
         return navigateTo(path)
       }
     }

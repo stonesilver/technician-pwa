@@ -39,9 +39,7 @@ onMounted(async () => {
 
 <template>
   <div id="app-layout" class="w-full relative max-w-3xl mx-auto flex flex-col bg-white flex-1">
-    <div v-if="loading" class="fixed inset-0 bg-white h-full w-full z-[10] center-item">
-      <shared-icon name="mca" class-name="size-24 animate-pulse" />
-    </div>
+    <shared-splash-screen v-if="loading" />
 
     <!-- <template v-else> -->
     <layout-the-nav-bar />

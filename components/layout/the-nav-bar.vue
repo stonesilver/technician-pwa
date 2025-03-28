@@ -8,7 +8,12 @@ const titleTag = computed(() => {
 })
 
 const canGoBack = computed(() => {
-  return (route.meta?.goBack ?? "") as string
+  const back = route.meta?.goBack as string
+  return typeof back === "string" && back === "true"
+})
+
+const hideNavBar = computed(() => {
+  return route.meta?.hideNavBar === "yes"
 })
 </script>
 
@@ -16,14 +21,14 @@ const canGoBack = computed(() => {
   <header class="border-b-[0.6px] bg-gray-50 z-[5] border-b-gray-200 shadow-[0_1px_4px_0_#11111105] py-[18px] px-5 sticky top-0">
     <nav class="min-h-[38px] flex items-center gap-[15px]">
       <shared-icon
-        v-if="typeof canGoBack === 'string' && canGoBack === 'yes'"
+        v-if="canGoBack"
         name="arrow-right"
         class="rotate-180 size-6 center-item cursor-pointer"
         class-name="size-5 [&>path]:stroke-[#439687]"
         @click="go(-1)"
       />
 
-      <layout-the-hamburger v-if="!['Provide estimate'].includes(titleTag) && !canGoBack" v-model="checked" />
+      <layout-the-hamburger v-if="!hideNavBar && !canGoBack" v-model="checked" />
 
       <p class="flex-1 text-gray-900 font-medium text-xl">{{ titleTag }}</p>
 
