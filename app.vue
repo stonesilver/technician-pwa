@@ -26,7 +26,7 @@ const handleActionOnClick = () => {
 // }
 
 if ('serviceWorker' in navigator) {
-  const registration = await navigator.serviceWorker.register('/sw.js');
+  const registration = await navigator.serviceWorker.register('/service-worker/service-worker.ts');
 
   registration.addEventListener('updatefound', () => {
     const newWorker = registration.installing;
