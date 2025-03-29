@@ -7,10 +7,10 @@ import { CacheFirst } from "workbox-strategies"
 import { CacheableResponsePlugin } from "workbox-cacheable-response"
 import { ExpirationPlugin } from "workbox-expiration"
 
-// declare let self: ServiceWorkerGlobalScope
+declare let self: ServiceWorkerGlobalScope
 
-// // self.__WB_MANIFEST is default injection point
-// precacheAndRoute(self.__WB_MANIFEST)
+// self.__WB_MANIFEST is default injection point
+precacheAndRoute(self.__WB_MANIFEST)
 // precacheAndRoute([{ url: "/", revision: null }])
 
 // // clean old assets
