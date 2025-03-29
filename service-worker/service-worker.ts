@@ -44,7 +44,13 @@ registerRoute(
 
 self.addEventListener("install", () => {
   console.log("Service Worker installing...")
-  self.skipWaiting() // Instantly activates the new version
+  //   self.skipWaiting() // Instantly activates the new version
+})
+
+self.addEventListener("message", (event) => {
+  if (event.data === "skipWaiting") {
+    self.skipWaiting()
+  }
 })
 
 self.addEventListener("activate", (event) => {

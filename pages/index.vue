@@ -51,7 +51,7 @@ const handleLogin: SubmissionHandler<LoginPayload, any> = async (values: LoginPa
 <template>
   <div class="flex flex-col flex-1">
     <div class="flex-1 flex flex-col md:justify-center pt-12">
-      <div class="mx-auto size-[90px] bg-red-50 center-item rounded-lg">
+      <div class="mx-auto size-[90px] bg-primary-50 center-item rounded-lg">
         <shared-icon name="repair-technician" />
       </div>
 

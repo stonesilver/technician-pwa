@@ -11,10 +11,18 @@ onMounted(() => {
 
 const { showModal, installPWA } = useInstallPwa()
 
+const handleActionOnClick = () => {
+     if (navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage('skipWaiting');
+     }
+
+     window.location.reload()
+}
+
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.addEventListener('controllerchange', () => {
     useToast.info("New update available.", {
-    action: { label: "Update", onClick: () => window.location.reload() },
+    action: { label: "Update", onClick: handleActionOnClick },
     duration: Infinity,
     classes: { actionButton: "!bg-blue-500" },
   })
