@@ -40,13 +40,13 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div id="app-layout" class="w-full relative max-w-3xl mx-auto flex flex-col bg-white flex-1">
+  <div id="app-layout" class="w-full relative flex flex-col bg-white flex-1">
     <shared-splash-screen v-if="loading" />
 
     <!-- <template v-else> -->
     <layout-the-nav-bar />
 
-    <div class="px-5 pb-12">
+    <div class="px-5 pb-12 w-full max-w-3xl mx-auto">
       <slot />
     </div>
     <!-- </template> -->

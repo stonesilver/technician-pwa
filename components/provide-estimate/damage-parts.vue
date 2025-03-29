@@ -42,7 +42,7 @@ const {
       <div
         ref="wrapperRef"
         class="no-scrollbar max-md:w-[calc(100%+20px)] w-full overflow-x-auto snap-x snap-mandatory scroll-smooth grid grid-flow-col gap-3"
-        :class="[damages.length === 1 ? 'auto-cols-[98%] md:auto-cols-[80%]' : damages.length >= 2 ? 'auto-cols-[85%] md:auto-cols-[295px]' : '']"
+        :class="[damages.length === 1 ? 'auto-cols-[98%] md:auto-cols-[99%]' : damages.length >= 2 ? 'auto-cols-[85%] md:auto-cols-[295px]' : '']"
       >
         <div
           v-if="isFetchingEstimateRequest"
@@ -71,7 +71,7 @@ const {
               v-slot="{ src, isLoaded, imgAttrs }"
               :src="item.close_range"
               :alt="item.damage_area"
-              class="h-[342px] object-cover block rounded-[3.68px] bg-gray-200"
+              class="h-[342px] w-full object-cover block rounded-[3.68px] bg-gray-200"
               :custom="true"
             >
               <img v-if="isLoaded" v-bind="imgAttrs" :src="src" class="h-[342px] object-cover block rounded-[3.68px]" />
@@ -88,7 +88,7 @@ const {
           </div>
 
           <div class="mt-[18px] flex justify-between items-center gap-4">
-            <p class="text-sm leading-[18px] font-medium text-mca flex-shrink-0">Damage {{ index + 1 }}</p>
+            <p class="text-sm leading-[18px] font-medium text-mca flex-shrink-0">Damage {{ damages.length > 1 ? index + 1 : "" }}</p>
             <shared-badge :text="`${item.damage_area} damage || ${item.damage_part}`" class="max-w-[70%] p-[4px_12px]" />
           </div>
 
