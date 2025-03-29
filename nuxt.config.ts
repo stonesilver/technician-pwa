@@ -35,7 +35,7 @@ export default defineNuxtConfig({
     registerType: "autoUpdate", // "prompt",
     strategies: "injectManifest",
     srcDir: "./service-worker",
-    filename: "sw.ts",
+    filename: "service-worker.ts", //"sw.ts",
     manifest: {
       id: "/?mca=0.0.0",
       name: "Auto Quote Estimator",
