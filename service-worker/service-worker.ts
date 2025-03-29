@@ -42,7 +42,7 @@ registerRoute(
 // self.skipWaiting()
 // clientsClaim()
 
-self.addEventListener("install", (event) => {
+self.addEventListener("install", () => {
   console.log("Service Worker installing...")
   self.skipWaiting() // Instantly activates the new version
 })

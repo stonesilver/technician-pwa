@@ -63,7 +63,7 @@ const technician = useState<TechnicianContext>("technician")
       class="mt-[22px]"
       @action="completePendingEstimateOnClick"
     />
-    <h1 class="text-lg text-purple-700 font-medium mt-[22px] leading-none">Welcome back Technician {{ technician?.first_name ?? "" }}</h1>
+    <h1 class="text-lg text-gray-700 font-medium mt-[22px] leading-none">Welcome back Technician {{ technician?.first_name ?? "" }}</h1>
 
     <div class="mt-7 bg-gray-50 border-[0.4px] border-purple-100 max-[375px]:px-3 px-[23px] sm:px-6 pt-[26px] pb-5">
       <div class="grid grid-cols-[1fr_auto] sm:grid-cols-2 gap-2">
