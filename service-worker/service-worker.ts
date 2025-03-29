@@ -33,3 +33,18 @@ precacheAndRoute(self.__WB_MANIFEST)
 
 // self.skipWaiting()
 // clientsClaim()
+
+self.addEventListener("install", (event) => {
+  console.log("Service Worker installing...")
+  self.skipWaiting() // Instantly activates the new version
+})
+
+self.addEventListener("activate", (event) => {
+  console.log("Service Worker activated. Cleaning old caches...")
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(cacheNames.map((cache) => caches.delete(cache)))
+    })
+  )
+  self.clients.claim() // Takes control of open pages immediately
+})
