@@ -47,12 +47,6 @@ self.addEventListener("install", () => {
   //   self.skipWaiting() // Instantly activates the new version
 })
 
-self.addEventListener("message", (event) => {
-  if (event.data === "skipWaiting") {
-    self.skipWaiting()
-  }
-})
-
 self.addEventListener("activate", (event) => {
   console.log("Service Worker activated. Cleaning old caches...")
   event.waitUntil(

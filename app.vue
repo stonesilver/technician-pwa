@@ -12,20 +12,34 @@ onMounted(() => {
 const { showModal, installPWA } = useInstallPwa()
 
 const handleActionOnClick = () => {
-     if (navigator.serviceWorker.controller) {
-            navigator.serviceWorker.controller.postMessage('skipWaiting');
-     }
-
-     window.location.reload()
+   window.location.reload()
 }
 
+// if ('serviceWorker' in navigator) {
+//   navigator.serviceWorker.addEventListener('controllerchange', () => {
+//     useToast.info("New update available.", {
+//     action: { label: "Update", onClick: handleActionOnClick },
+//     duration: Infinity,
+//     classes: { actionButton: "!bg-blue-500" },
+//   })
+//   });
+// }
+
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    useToast.info("New update available.", {
-    action: { label: "Update", onClick: handleActionOnClick },
-    duration: Infinity,
-    classes: { actionButton: "!bg-blue-500" },
-  })
+  const registration = await navigator.serviceWorker.register('/sw.js');
+
+  registration.addEventListener('updatefound', () => {
+    const newWorker = registration.installing;
+
+    newWorker.addEventListener('statechange', () => {
+      if (newWorker.state === 'installed') {
+        useToast.info("New update available.", {
+          action: {label: "Update", onClick: handleActionOnClick },
+          duration: Infinity,
+          classes: { actionButton: "!bg-blue-500" },
+        });
+      }
+    });
   });
 }
 </script>
