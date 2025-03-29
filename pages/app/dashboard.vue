@@ -44,7 +44,7 @@ const completePendingEstimateOnClick = async () => {
 }
 
 const handleWithdrawalOnClick = () => {
-  if (walletBalance.value && parseFloat(walletBalance.value.balance_withdrawable) > 0) {
+  if (walletBalance.value && parseFloat(walletBalance.value?.balance_withdrawable ?? "0") > 0) {
     modals.openWithdrawalModal = true
   } else {
     useToast.error("You do not have any withdrawable earnings")
