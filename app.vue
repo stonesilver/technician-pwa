@@ -15,31 +15,13 @@ const handleActionOnClick = () => {
    window.location.reload()
 }
 
-// if ('serviceWorker' in navigator) {
-//   navigator.serviceWorker.addEventListener('controllerchange', () => {
-//     useToast.info("New update available.", {
-//     action: { label: "Update", onClick: handleActionOnClick },
-//     duration: Infinity,
-//     classes: { actionButton: "!bg-blue-500" },
-//   })
-//   });
-// }
-
 if ('serviceWorker' in navigator) {
-  const registration = await navigator.serviceWorker.register('/service-worker/service-worker.ts');
-
-  registration.addEventListener('updatefound', () => {
-    const newWorker = registration.installing;
-
-    newWorker.addEventListener('statechange', () => {
-      if (newWorker.state === 'installed') {
-        useToast.info("New update available.", {
-          action: {label: "Update", onClick: handleActionOnClick },
-          duration: Infinity,
-          classes: { actionButton: "!bg-blue-500" },
-        });
-      }
-    });
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    useToast.info("New update available.", {
+    action: { label: "Update", onClick: handleActionOnClick },
+    duration: Infinity,
+    classes: { actionButton: "!bg-blue-500" },
+  })
   });
 }
 </script>
