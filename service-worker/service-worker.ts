@@ -2,10 +2,10 @@
 /// <reference types="vite/client" />
 import { cleanupOutdatedCaches, createHandlerBoundToURL, precacheAndRoute } from "workbox-precaching"
 // import { clientsClaim } from "workbox-core"
-// import { NavigationRoute, registerRoute } from "workbox-routing"
-// import { CacheFirst } from "workbox-strategies"
-// import { CacheableResponsePlugin } from "workbox-cacheable-response"
-// import { ExpirationPlugin } from "workbox-expiration"
+import { NavigationRoute, registerRoute } from "workbox-routing"
+import { CacheFirst, NetworkFirst } from "workbox-strategies"
+import { CacheableResponsePlugin } from "workbox-cacheable-response"
+import { ExpirationPlugin } from "workbox-expiration"
 
 declare let self: ServiceWorkerGlobalScope
 
@@ -18,18 +18,26 @@ precacheAndRoute(self.__WB_MANIFEST)
 
 // let allowlist: undefined | RegExp[]
 // if (import.meta.env.DEV) allowlist = [/^\/$/]
-// // const allowlist: RegExp[] = [/^\/$/]
+// const allowlist: RegExp[] = [/^\/$/]
 
-// // to allow work offline
+// to allow work offline
 // registerRoute(new NavigationRoute(createHandlerBoundToURL("/"), { allowlist }))
 
-// registerRoute(
-//   ({ url }) => url.pathname.includes("bank/list-banks"),
-//   new CacheFirst({
-//     cacheName: "bank-list-cache",
-//     plugins: [new CacheableResponsePlugin({ statuses: [200] }), new ExpirationPlugin({ maxAgeSeconds: 60 * 60 * 24 * 7, maxEntries: 1 })],
-//   })
-// )
+// Use NetworkFirst for all navigation requests
+registerRoute(
+  ({ request }) => request.mode === "navigate",
+  new NetworkFirst({
+    cacheName: "pages-cache",
+  })
+)
+
+registerRoute(
+  ({ url }) => url.pathname.includes("bank/list-banks"),
+  new CacheFirst({
+    cacheName: "bank-list-cache",
+    plugins: [new CacheableResponsePlugin({ statuses: [200] }), new ExpirationPlugin({ maxAgeSeconds: 60 * 60 * 24 * 7, maxEntries: 1 })],
+  })
+)
 
 // self.skipWaiting()
 // clientsClaim()
