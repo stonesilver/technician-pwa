@@ -10,7 +10,8 @@ export default defineNuxtConfig({
     //   cert: "./localhost+2.pem",
     // },
   },
-  modules: ["@vite-pwa/nuxt", "@nuxt/image", "@nuxtjs/tailwindcss", "shadcn-nuxt", "@vee-validate/nuxt"],
+  // "@vite-pwa/nuxt",
+  modules: ["@nuxt/image", "@nuxtjs/tailwindcss", "shadcn-nuxt", "@vee-validate/nuxt"],
   veeValidate: {
     // disable or enable auto imports
     autoImports: true,
