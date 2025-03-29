@@ -68,7 +68,7 @@ export default defineNuxtConfig({
           src: "app-icons/app-icons-192x192.png",
           sizes: "192x192",
           type: "image/png",
-          purpose: "maskable",
+          purpose: "any maskable",
         },
         {
           src: "app-icons/app-icons-384x384.png",
