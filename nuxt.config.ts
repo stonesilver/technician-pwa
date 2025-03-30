@@ -32,10 +32,10 @@ export default defineNuxtConfig({
     componentDir: "./components/ui",
   },
   pwa: {
-    registerType: "autoUpdate", // "prompt",
-    strategies: "generateSW", //"injectManifest",
-    // srcDir: "./service-worker",
-    // filename: "service-worker.ts", //"sw.ts",
+    registerType: "prompt", // "autoUpdate",
+    strategies: "injectManifest", // "generateSW",
+    srcDir: "./service-worker",
+    filename: "service-worker.ts", //"sw.ts",
     manifest: {
       id: "/?mca=0.0.0",
       name: "Auto Quote Estimator",

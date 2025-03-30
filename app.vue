@@ -16,7 +16,11 @@ const route = useRoute()
 
 const handleActionOnClick = () => {
   // newWorker.postMessage({ type: "SKIP_WAITING" })
-   window.location.reload()
+  nuxtApp.$pwa.updateServiceWorker(true)
+  window.location.reload()
+  nuxtApp.$pwa.getSWRegistration(registration => {
+    registration.waiting.postMessage({ type: "SKIP_WAITING" })
+  })
 }
 
 watch(() => nuxtApp.$pwa.needRefresh, (show) => {
