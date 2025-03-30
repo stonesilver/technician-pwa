@@ -19,9 +19,9 @@ export const useInstallPwa = () => {
   const nuxtApp = useNuxtApp()
   const route = useRoute()
 
-  const handleActionOnClick = () => {
-    nuxtApp?.$pwa?.updateServiceWorker(true)
-    window.location.reload()
+  const handleActionOnClick = async () => {
+    await nuxtApp?.$pwa?.updateServiceWorker(true)
+    // window.location.reload()
     // nuxtApp?.$pwa?.getSWRegistration((registration) => {
     //   registration.waiting.postMessage({ type: "SKIP_WAITING" })
     // })
