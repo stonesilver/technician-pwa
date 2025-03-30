@@ -11,11 +11,11 @@ export const useInstallPwa = () => {
   const technician = useState<TechnicianContext>("technician")
 
   // Combined lifecycle hooks
-  // onMounted(() => {
-  //   window.addEventListener("beforeinstallprompt", handleInstallPrompt)
-  //   window.addEventListener("appinstalled", handleAppInstalled)
-  //   console.log("PWA listeners mounted")
-  // })
+  onMounted(() => {
+    window.addEventListener("beforeinstallprompt", handleInstallPrompt)
+    window.addEventListener("appinstalled", handleAppInstalled)
+    console.log("PWA listeners mounted")
+  })
 
   const nuxtApp = useNuxtApp()
   const route = useRoute()
