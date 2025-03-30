@@ -1,4 +1,5 @@
 <script setup type="ts">
+// import { useWorkbox } from '@vite-pwa/nuxt';
 
 onMounted(() => {
   // disable IOS scaling
@@ -10,11 +11,31 @@ onMounted(() => {
 })
 
 const { showModal, installPWA } = useInstallPwa()
+// const { needRefresh, updateServiceWorker } = useWorkbox();
+const nuxtApp = useNuxtApp()
+const route = useRoute()
+
 
 const handleActionOnClick = () => {
-  newWorker.postMessage({ type: "SKIP_WAITING" })
-   window.location.reload()
+  // newWorker.postMessage({ type: "SKIP_WAITING" })
+  //  window.location.reload()
+  alert('Yes!!!!')
+  updateServiceWorker(true)
 }
+
+watch(() => nuxtApp.$pwa.needRefresh, (show) => {
+  if (show) {
+    useToast.info("New update available!", {
+      action: {label: "Update", onClick: () => handleActionOnClick()},
+      duration: Infinity,
+      classes: { actionButton: "!bg-blue-500" },
+    });
+  }
+});
+
+const showInstallModal = computed(() => {
+  return nuxtApp.$pwa?.showInstallPrompt && route.meta.layout === 'default'
+})
 
 // if ('serviceWorker' in navigator) {
 //   navigator.serviceWorker.addEventListener('controllerchange', () => {
@@ -25,34 +46,6 @@ const handleActionOnClick = () => {
 //   })
 //   });
 // }
-
-onMounted(() => {
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/service-worker.ts").then((registration) => {
-      registration.onupdatefound = () => {
-        const newWorker = registration.installing;
-        newWorker?.addEventListener("statechange", () => {
-          if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
-           useToast.info("New update available.", {
-            action: { label: "Update", onClick: handleActionOnClick },
-            duration: Infinity,
-            classes: { actionButton: "!bg-blue-500" },
-           })
-          }
-        });
-      };
-    });
-
-    navigator.serviceWorker.addEventListener("controllerchange", () => {
-      // window.location.reload(); // Reload ONLY when user accepts the update
-       useToast.info("New update available.", {
-        action: { label: "Update", onClick: handleActionOnClick },
-        duration: Infinity,
-        classes: { actionButton: "!bg-blue-500" },
-      })
-    });
-  }
-});
 </script>
 
 <template>
@@ -63,7 +56,8 @@ onMounted(() => {
       <Toaster richColors position="top-center" />
       <NuxtPage />
 
-      <layout-install-pwa-modal v-model="showModal" @install-pwa="installPWA" />
+      <layout-install-pwa-modal :model-value="showInstallModal" @install-pwa="installPWA" />
+      <!-- <layout-install-pwa-modal v-model="showModal" @install-pwa="installPWA" /> -->
     </NuxtLayout>
   </div>
 </template>
