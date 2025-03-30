@@ -18,7 +18,7 @@ const handleActionOnClick = () => {
   // newWorker.postMessage({ type: "SKIP_WAITING" })
   //  window.location.reload()
   alert('Yes!!!!')
-  updateServiceWorker(true)
+  nuxtApp.$pwa.updateServiceWorker(true)
 }
 
 watch(() => nuxtApp.$pwa.needRefresh, (show) => {
