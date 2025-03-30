@@ -115,6 +115,15 @@ export default defineNuxtConfig({
       navigateFallback: "/",
       globPatterns: ["**/*.{js,css,html,png,svg,ico}"],
       navigateFallbackAllowlist: [/^\/$/, /^\/app\/provide-estimate\?.*$/, /^\/app\/$/],
+      runtimeCaching: [
+        {
+          urlPattern: "/",
+          handler: "NetworkFirst",
+          options: {
+            cacheName: "root-cache",
+          },
+        },
+      ],
     },
     injectManifest: {
       globPatterns: ["**/*.{js,css,html,png,svg,ico}"],
