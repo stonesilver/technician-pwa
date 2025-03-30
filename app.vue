@@ -23,7 +23,8 @@ const handleActionOnClick = () => {
   updateServiceWorker(true)
 }
 
-watch(() => nuxtApp.$pwa.needRefresh, (show) => {
+watch(nuxtApp.$pwa.needRefresh, (show) => {
+  console.log(show, 'needRefresh triggered')
   if (show) {
     useToast.info("New update available!", {
       action: {label: "Update", onClick: () => handleActionOnClick()},
