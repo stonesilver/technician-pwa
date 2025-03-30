@@ -32,7 +32,7 @@ export default defineNuxtConfig({
     componentDir: "./components/ui",
   },
   pwa: {
-    registerType: "prompt", //  "autoUpdate",
+    registerType: "autoUpdate", // "prompt",
     strategies: "generateSW", //"injectManifest",
     // srcDir: "./service-worker",
     // filename: "service-worker.ts", //"sw.ts",
@@ -114,16 +114,7 @@ export default defineNuxtConfig({
       cleanupOutdatedCaches: true,
       navigateFallback: "/",
       globPatterns: ["**/*.{js,css,html,png,svg,ico}"],
-      navigateFallbackAllowlist: [/^\/$/, /^\/app\/provide-estimate\?.*$/, /^\/app\/$/],
-      runtimeCaching: [
-        {
-          urlPattern: "/",
-          handler: "NetworkFirst",
-          options: {
-            cacheName: "root-cache",
-          },
-        },
-      ],
+      // navigateFallbackAllowlist: [/^\/$/, /^\/app\/provide-estimate\?.*$/, /^\/app\/$/],
     },
     injectManifest: {
       globPatterns: ["**/*.{js,css,html,png,svg,ico}"],
