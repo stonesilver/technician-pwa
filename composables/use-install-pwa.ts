@@ -14,7 +14,6 @@ export const useInstallPwa = () => {
   onMounted(() => {
     window.addEventListener("beforeinstallprompt", handleInstallPrompt)
     window.addEventListener("appinstalled", handleAppInstalled)
-    console.log("PWA listeners mounted")
   })
 
   const nuxtApp = useNuxtApp()
@@ -49,7 +48,6 @@ export const useInstallPwa = () => {
   onUnmounted(() => {
     window.removeEventListener("beforeinstallprompt", handleInstallPrompt)
     window.removeEventListener("appinstalled", handleAppInstalled)
-    console.log("PWA listeners cleaned up")
   })
 
   const handleInstallPrompt = (event: Event) => {
@@ -68,7 +66,6 @@ export const useInstallPwa = () => {
 
   // const redirectAfterInstall = () => {
   //   const redirectUrl = import.meta.env.VITE_BASE_DOMAIN || "/"
-  //   // Consider using Nuxt's navigateTo for SPA navigation
   //   window.location.href = redirectUrl
   // }
 
