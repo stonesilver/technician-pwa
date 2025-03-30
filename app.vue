@@ -1,5 +1,4 @@
 <script setup type="ts">
-// import { useWorkbox } from '@vite-pwa/nuxt';
 
 onMounted(() => {
   // disable IOS scaling
@@ -11,7 +10,6 @@ onMounted(() => {
 })
 
 const { showModal, installPWA } = useInstallPwa()
-// const { needRefresh, updateServiceWorker } = useWorkbox();
 const nuxtApp = useNuxtApp()
 const route = useRoute()
 
@@ -23,7 +21,7 @@ const handleActionOnClick = () => {
   updateServiceWorker(true)
 }
 
-watch(nuxtApp.$pwa.needRefresh, (show) => {
+watch(() => nuxtApp.$pwa.needRefresh, (show) => {
   console.log(show, 'needRefresh triggered')
   if (show) {
     useToast.info("New update available!", {
@@ -32,7 +30,7 @@ watch(nuxtApp.$pwa.needRefresh, (show) => {
       classes: { actionButton: "!bg-blue-500" },
     });
   }
-});
+}, { immediate: true });
 
 const showInstallModal = computed(() => {
   return nuxtApp.$pwa?.showInstallPrompt && route.meta.layout === 'default'
