@@ -1,46 +1,6 @@
 import type { TechnicianContext } from "~/types/auth"
 
 export const useInstallPwa = () => {
-  // const showModal = ref(false)
-  // const deferredPrompt = ref<any>(null)
-
-  // // Detect if the PWA install prompt is available
-  // onMounted(() => {
-  //   window.addEventListener("beforeinstallprompt", (event) => {
-  //     event.preventDefault() // Prevent the default install prompt
-  //     deferredPrompt.value = event
-  //     showModal.value = true // Show the modal
-  //   })
-
-  //   console.log("I am mounted!!!!")
-  // })
-
-  // onMounted(() => {
-  //   window.addEventListener("appinstalled", () => {
-  //     // Hide the app-provided install promotion
-  //     showModal.value = false
-  //     // Clear the deferredPrompt so it can be garbage collected
-  //     deferredPrompt.value = null
-  //     window.location.href = import.meta.env.VITE_BASE_DOMAIN || "/"
-  //     // Optionally, send analytics event to indicate successful install
-  //   })
-  // })
-
-  // // Handle PWA installation when button is clicked
-  // const installPWA = async () => {
-  //   if (deferredPrompt.value) {
-  //     deferredPrompt.value.prompt()
-  //     const choiceResult = await deferredPrompt.value.userChoice
-
-  //     if (choiceResult.outcome === "accepted") {
-  //     } else {
-  //       showModal.value = false
-  //     }
-
-  //     deferredPrompt.value = null // Reset after interaction
-  //   }
-  // }
-
   type BeforeInstallPromptEvent = Event & {
     prompt: () => Promise<void>
     userChoice: Promise<{ outcome: "accepted" | "dismissed" }>
@@ -51,10 +11,39 @@ export const useInstallPwa = () => {
   const technician = useState<TechnicianContext>("technician")
 
   // Combined lifecycle hooks
-  onMounted(() => {
-    window.addEventListener("beforeinstallprompt", handleInstallPrompt)
-    window.addEventListener("appinstalled", handleAppInstalled)
-    console.log("PWA listeners mounted")
+  // onMounted(() => {
+  //   window.addEventListener("beforeinstallprompt", handleInstallPrompt)
+  //   window.addEventListener("appinstalled", handleAppInstalled)
+  //   console.log("PWA listeners mounted")
+  // })
+
+  const nuxtApp = useNuxtApp()
+  const route = useRoute()
+
+  const handleActionOnClick = () => {
+    nuxtApp?.$pwa?.updateServiceWorker(true)
+    window.location.reload()
+    // nuxtApp?.$pwa?.getSWRegistration((registration) => {
+    //   registration.waiting.postMessage({ type: "SKIP_WAITING" })
+    // })
+  }
+
+  watch(
+    () => nuxtApp?.$pwa?.needRefresh,
+    (show) => {
+      if (show) {
+        useToast.info("New update available!", {
+          action: { label: "Update", onClick: () => handleActionOnClick() },
+          duration: Infinity,
+          classes: { actionButton: "!bg-blue-500" },
+        })
+      }
+    },
+    { immediate: true }
+  )
+
+  const showInstallModal = computed(() => {
+    return nuxtApp?.$pwa?.showInstallPrompt && route.meta.layout === "default" && technician.value?.has_changed_password
   })
 
   onUnmounted(() => {
@@ -72,7 +61,6 @@ export const useInstallPwa = () => {
   }
 
   const handleAppInstalled = () => {
-    console.log("PWA was installed")
     showModal.value = false
     deferredPrompt.value = null
     // redirectAfterInstall()
@@ -116,5 +104,5 @@ export const useInstallPwa = () => {
     console.log(`${accepted ? "accepted" : "declined"}`)
   }
 
-  return { showModal, installPWA }
+  return { showInstallModal, showModal, installPWA }
 }
