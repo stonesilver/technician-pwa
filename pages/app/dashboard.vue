@@ -86,7 +86,7 @@ const technician = useState<TechnicianContext>("technician")
 
       <div class="mt-5 pt-5 border-t-[0.4px] border-t-gray-300">
         <Button
-          variant="default_light"
+          variant="destructive"
           class="h-[50px] w-full md:max-w-[289px] ml-auto rounded"
           :disabled="walletStatus === 'pending'"
           @click="handleWithdrawalOnClick"
