@@ -156,6 +156,6 @@ const handleWithdrawalOnClick = () => {
       </template>
     </shared-responsive-modal>
 
-    <wallet-withdraw-earning-modal v-model="openWithdrawalModal" />
+    <wallet-withdraw-earning-modal v-model="openWithdrawalModal" :withdrawable-earning="walletBalance?.balance_withdrawable" />
   </div>
 </template>

@@ -1,11 +1,9 @@
 <script lang="ts" setup>
-const open = defineModel<boolean>({ default: false })
-
-defineEmits<{ (e: "install-pwa"): void }>()
+const { showModal, showInstallModal, installPWA } = useInstallPwa()
 </script>
 
 <template>
-  <shared-the-modal v-model="open" dismissible content-class="py-6 rounded-xl max-w-[332px]">
+  <shared-the-modal :model-value="showInstallModal" dismissible content-class="py-6 rounded-xl max-w-[332px]" @update:model-value="showModal = false">
     <template #content>
       <div class="text-center">
         <div class="size-[50px] rounded-full bg-success-50 mx-auto center-item">
@@ -16,7 +14,7 @@ defineEmits<{ (e: "install-pwa"): void }>()
           For a faster, smoother experience, we recommend installing the PWA on your device
         </p>
 
-        <Button class="w-full mx-auto mt-[34px] h-[50px]" @click="$emit('install-pwa')">Install PWA</Button>
+        <Button class="w-full mx-auto mt-[34px] h-[50px]" @click="installPWA">Install PWA</Button>
       </div>
     </template>
   </shared-the-modal>

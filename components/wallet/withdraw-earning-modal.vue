@@ -9,10 +9,9 @@ import { numberToCurrency } from "~/utils/helper-functions/returns-string.ts"
 import type { BankAccountContext } from "~/types/wallet"
 
 const open = defineModel({ default: false })
+const props = defineProps<{ withdrawableEarning: string | undefined }>()
 const state = reactive({ loading: false, name: "", submitting: false })
 const debounceFunc = debounce()
-
-const bankOptions = ref<Options[]>([])
 
 const { data: bankAccount, refresh } = useCustomFetch<{ bankAccounts: BankAccountContext[] }>(getBankAccountUrl, {
   headers: { "show-error": "400" },
@@ -23,19 +22,23 @@ const { data: bankAccount, refresh } = useCustomFetch<{ bankAccounts: BankAccoun
   },
 })
 
-onMounted(async () => {
-  try {
-    await useCustomFetch<{ banks: { name: string; code: string }[] }>(listBankUrl, {
-      transform: (data) => {
-        bankOptions.value = data.banks.map(({ code, name }) => ({ label: name, value: code }))
-        return data
-      },
-      getCachedData(key, nuxtApp) {
-        return nuxtApp.payload.data[key] || nuxtApp.static.data[key]
-      },
-      server: false,
-    })
-  } catch (error) {}
+const { data } = await useCustomFetch<{ banks: { name: string; code: string }[] }>(listBankUrl, {
+  getCachedData(key, nuxtApp) {
+    return nuxtApp.payload.data[key] || nuxtApp.static.data[key]
+  },
+  server: false,
+})
+
+const bankOptions = computed<Options[]>(() => {
+  if (data.value?.banks) {
+    return data.value.banks.map(({ code, name }) => ({ label: name, value: code }))
+  }
+
+  return []
+})
+
+const hasAddedAccount = computed(() => {
+  return Array.isArray(bankAccount.value?.bankAccounts) && !!bankAccount.value.bankAccounts.length
 })
 
 const handleSubmit: SubmissionHandler<AddBankContext, any> = async (body: AddBankContext) => {
@@ -47,19 +50,20 @@ const handleSubmit: SubmissionHandler<AddBankContext, any> = async (body: AddBan
     state.submitting = true
     const { account_number, bank_code, bank_name, isDefault, ...rest } = body
     let id = defaultValues.value?.id
-    if (!defaultValues.value) {
+    if (!hasAddedAccount.value) {
       const createAccountPayload = { account_number, bank_code, bank_name, isDefault: true }
       const { bankAccount } = await api<{ bankAccount: BankAccountContext }>(createBankAccountUrl, { method: "POST", body: createAccountPayload })
       id = bankAccount.id
     }
 
     rest.amount = currencyToNumber(rest.amount) as unknown as string
-    const data = await api(transferFromWalletUrl, {
+    await api(transferFromWalletUrl, {
       method: "POST",
       body: { bank_account_id: id, ...rest },
     })
     useToast.success(`${numberToCurrency(rest.amount)} has been transfer to your ${bank_name} account.`)
     refresh()
+    open.value = false
   } catch (error) {
   } finally {
     state.submitting = false
@@ -68,7 +72,7 @@ const handleSubmit: SubmissionHandler<AddBankContext, any> = async (body: AddBan
 
 const handleGetAccountNumber = (account_number: string, bank_code: string) => {
   return debounceFunc(async () => {
-    if (account_number.length === 10 && bank_code) {
+    if (!!account_number && account_number.length === 10 && bank_code) {
       state.loading = true
       try {
         const body = { account_number, bank_code }
@@ -87,12 +91,13 @@ const handleGetAccountNumber = (account_number: string, bank_code: string) => {
 
 const defaultValues = computed(() => {
   const bank = bankAccount.value?.bankAccounts?.find((acc) => acc.isDefault)
+  const defaults = { withdrawable: parseFloat(props.withdrawableEarning ?? "0"), id: "" }
   if (bank) {
     const { account_number, bank_code, bank_name, isDefault, id } = bank
     handleGetAccountNumber(account_number, bank_code)
-    return { account_number, bank_code, bank_name, isDefault, id }
+    return { ...defaults, account_number, bank_code, bank_name, isDefault, id }
   } else {
-    return undefined
+    return defaults
   }
 })
 </script>
@@ -118,7 +123,7 @@ const defaultValues = computed(() => {
           <shared-select
             :model-value="{ label: values.bank_name, value: values.bank_code }"
             :options="bankOptions"
-            :disabled="!!defaultValues"
+            :disabled="hasAddedAccount"
             placeholder="Select bank"
             empty-text="No bank found"
             @update:model-value="
@@ -139,8 +144,8 @@ const defaultValues = computed(() => {
             inputmode="numeric"
             placeholder="Enter account number"
             autocomplete="off"
-            :disabled="!!defaultValues"
-            :readonly="!!defaultValues"
+            :disabled="hasAddedAccount"
+            :readonly="hasAddedAccount"
             :maxlength="10"
             number
             @input="handleGetAccountNumber(values.account_number, values.bank_code)"

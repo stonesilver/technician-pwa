@@ -1,5 +1,6 @@
 import * as yup from "yup"
 import { toTypedSchema } from "@vee-validate/yup"
+import { numberToCurrency } from "../helper-functions/returns-string.ts"
 
 export const LoginYupSchema = yup.object({
   phone_number: yup
@@ -91,8 +92,8 @@ export const AddBankSchema = yup.object().shape({
   account_number: yup
     .string()
     .matches(/^\d+$/, "Account number must be numeric")
-    .min(10, "Account number must be at least 10 digits")
-    .max(10, "Account number must be at most 10 digits")
+    .min(10, "Account number must be 10 digits")
+    .max(10, "Account number must be 10 digits")
     .required("Enter account number"),
   bank_code: yup.string().required("Bank code is required"),
   bank_name: yup.string().required("Select bank"),
@@ -101,6 +102,15 @@ export const AddBankSchema = yup.object().shape({
     .required("This a required field")
     .test("must be greater than 0", "Must be greater than 0", (value) => {
       return parseFloat(value?.toString()?.replace(/,/g, "")) > 0
+    })
+    .test("must be less or equal to withdrawable earning", "", (value, context) => {
+      const truthy = parseFloat(value?.toString()?.replace(/,/g, "")) <= context.options.context?.withdrawable
+      if (truthy) return true
+
+      return context.createError({
+        message: `Amount can't be more than ${numberToCurrency(context.options.context?.withdrawable)}`,
+        path: "amount",
+      })
     }),
   password: yup.string().required("Enter your password"),
   isDefault: yup.boolean().required("isDefault is required").default(true),

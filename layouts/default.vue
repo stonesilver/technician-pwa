@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { TechnicianContext, UserContext } from "~/types/auth"
-// import { logoutUser } from "~/utils/helper-functions/returns-void.ts"
 
 const technician = useState<TechnicianContext>("technician")
 const isFirstTimeLogin = computed(() => technician.value && !technician.value.has_changed_password)
@@ -35,23 +34,18 @@ onMounted(async () => {
     }
   }
 })
-
-// const { showModal, installPWA } = useInstallPwa()
 </script>
 
 <template>
   <div id="app-layout" class="w-full relative flex flex-col bg-white flex-1">
     <shared-splash-screen v-if="loading" />
 
-    <!-- <template v-else> -->
     <layout-the-nav-bar />
 
     <div class="px-5 pb-12 w-full max-w-3xl mx-auto">
       <slot />
     </div>
-    <!-- </template> -->
 
     <auth-first-time-login-modal v-model="isFirstTimeLogin" v-model:technician="technician" />
-    <!-- <layout-install-pwa-modal v-model="showModal" @install-pwa="installPWA" /> -->
   </div>
 </template>

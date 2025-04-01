@@ -138,7 +138,7 @@ const technician = useState<TechnicianContext>("technician")
       </div>
     </div>
 
-    <wallet-withdraw-earning-modal v-model="modals.openWithdrawalModal" />
+    <wallet-withdraw-earning-modal v-model="modals.openWithdrawalModal" :withdrawable-earning="walletBalance?.balance_withdrawable" />
 
     <dashboard-pending-estimates-modal v-model="modals.openPendingEstimatesModal" :pending-estimates="pendingEstimates" />
   </div>

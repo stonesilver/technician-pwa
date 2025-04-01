@@ -39,7 +39,7 @@ export const useInstallPwa = () => {
   )
 
   const showInstallModal = computed(() => {
-    return nuxtApp?.$pwa?.showInstallPrompt && route.meta.layout === "default" && technician.value?.has_changed_password
+    return showModal.value && nuxtApp?.$pwa?.showInstallPrompt && route.meta.layout === "default" && technician.value?.has_changed_password
   })
 
   onUnmounted(() => {

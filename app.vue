@@ -1,15 +1,10 @@
-<script setup type="ts">
-
+<script lang="ts" setup>
 onMounted(() => {
   // disable IOS scaling
-    if (navigator.userAgent.indexOf("iPhone") > -1) {
-      document
-        .querySelector("[name=viewport]")
-        .setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=1")
-    }
+  if (navigator.userAgent.indexOf("iPhone") > -1) {
+    document.querySelector("[name=viewport]")?.setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=1")
+  }
 })
-
-const { showInstallModal, installPWA } = useInstallPwa()
 </script>
 
 <template>
@@ -20,7 +15,7 @@ const { showInstallModal, installPWA } = useInstallPwa()
       <Toaster richColors position="top-center" />
       <NuxtPage />
 
-      <layout-install-pwa-modal :model-value="showInstallModal" @install-pwa="installPWA" />
+      <layout-install-pwa-modal />
     </NuxtLayout>
   </div>
 </template>
