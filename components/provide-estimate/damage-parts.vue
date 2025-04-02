@@ -147,7 +147,7 @@ const {
         Do this later
       </Button>
       <Button class="h-14" :disabled="isFetchingEstimateRequest || isSubmitting" :is-loading="isSubmitting" @click="handleSubmitEstimate">
-        <span v-if="addedCount === damages.length"> Submit </span>
+        <span v-if="addedCount === damages.length || damages.length === 1"> Submit </span>
         <span v-else> {{ addedCount }} of {{ damages.length }}</span>
       </Button>
     </div>
