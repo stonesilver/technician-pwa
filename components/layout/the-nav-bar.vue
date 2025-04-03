@@ -19,7 +19,7 @@ const hideNavBar = computed(() => {
 
 <template>
   <header class="border-b-[0.6px] bg-gray-50 z-[5] border-b-gray-200 shadow-[0_1px_4px_0_#11111105] py-[18px] px-5 sticky top-0">
-    <nav class="min-h-[38px] w-full max-w-3xl mx-auto px-5 flex items-center gap-[15px]">
+    <nav class="min-h-[38px] w-full max-w-3xl mx-auto flex items-center gap-[15px]">
       <shared-icon
         v-if="canGoBack"
         name="arrow-right"
