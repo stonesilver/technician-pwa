@@ -16,6 +16,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       const isAuth = isTokenValid()
 
       if (isAuth) {
+        const isPasswordReset = from.fullPath.includes("/password-reset")
+        if (isPasswordReset) {
+          logoutUser()
+          return
+        }
+
         const path = ["/", "/app/account"].includes(from.fullPath) ? "/app/dashboard" : from.fullPath
         // if (from.fullPath === to.fullPath && history.length) {
         //   return useRouter().back()

@@ -7,14 +7,8 @@ export const useInstallPwa = () => {
   }
 
   const deferredPrompt = ref<BeforeInstallPromptEvent | null>(null)
-  const showModal = ref(false)
+  const showModal = ref(true)
   const technician = useState<TechnicianContext>("technician")
-
-  // Combined lifecycle hooks
-  onMounted(() => {
-    window.addEventListener("beforeinstallprompt", handleInstallPrompt)
-    window.addEventListener("appinstalled", handleAppInstalled)
-  })
 
   const nuxtApp = useNuxtApp()
   const route = useRoute()
@@ -24,27 +18,14 @@ export const useInstallPwa = () => {
     window.location.reload()
   }
 
-  watch(
-    () => nuxtApp?.$pwa?.needRefresh,
-    (show) => {
-      if (show) {
-        useToast.info("New update available!", {
-          action: { label: "Update", onClick: () => handleActionOnClick() },
-          duration: Infinity,
-          classes: { actionButton: "!bg-blue-500" },
-        })
-      }
-    },
-    { immediate: true }
-  )
-
   const showInstallModal = computed(() => {
-    return showModal.value && nuxtApp?.$pwa?.showInstallPrompt && route.meta.layout === "default" && technician.value?.has_changed_password
-  })
-
-  onUnmounted(() => {
-    window.removeEventListener("beforeinstallprompt", handleInstallPrompt)
-    window.removeEventListener("appinstalled", handleAppInstalled)
+    return (
+      showModal.value &&
+      nuxtApp?.$pwa?.showInstallPrompt &&
+      route.meta.layout === "default" &&
+      technician.value?.has_changed_password &&
+      !!deferredPrompt.value
+    )
   })
 
   const handleInstallPrompt = (event: Event) => {
@@ -97,6 +78,30 @@ export const useInstallPwa = () => {
     // Implement your analytics logic here
     console.log(`${accepted ? "accepted" : "declined"}`)
   }
+
+  onMounted(() => {
+    window.addEventListener("beforeinstallprompt", handleInstallPrompt)
+    window.addEventListener("appinstalled", handleAppInstalled)
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener("beforeinstallprompt", handleInstallPrompt)
+    window.removeEventListener("appinstalled", handleAppInstalled)
+  })
+
+  watch(
+    () => nuxtApp?.$pwa?.needRefresh,
+    (show) => {
+      if (show) {
+        useToast.info("New update available!", {
+          action: { label: "Update", onClick: () => handleActionOnClick() },
+          duration: Infinity,
+          classes: { actionButton: "!bg-blue-500" },
+        })
+      }
+    },
+    { immediate: true }
+  )
 
   return { showInstallModal, showModal, installPWA }
 }

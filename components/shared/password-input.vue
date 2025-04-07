@@ -20,10 +20,10 @@ const handleTypeSwitch = () => {
       autocomplete="off"
       class="pr-10 bg-transparent caret-mca z-[1]"
       :class="[
-        !passwordIsVisible ? 'text-transparent tracking-[2.5px] placeholder:tracking-normal text-lg placeholder:text-sm' : undefined,
+        field?.value && !passwordIsVisible ? 'text-transparent tracking-[2.5px] placeholder:tracking-normal text-lg placeholder:text-sm' : undefined,
         inputClass,
       ]"
-      v-bind="field"
+      v-bind="{ ...$attrs, ...field }"
     >
       <template #append>
         <shared-icon :name="passwordIsVisible ? 'eye' : 'eye-slash'" class="cursor-pointer z-[2]" @click="handleTypeSwitch" />

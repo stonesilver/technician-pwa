@@ -13,38 +13,33 @@ const route = useRoute()
 const handleLogin: SubmissionHandler<LoginPayload, any> = async (values: LoginPayload) => {
   isLoading.value = true
 
-  const res = useApi()<LoginResponse>(loginUrl, {
-    method: "POST",
-    body: { ...values, phone_number: `+234${values.phone_number.slice(1)}` },
-  })
+  try {
+    const { token, user } = await useApi()<LoginResponse>(loginUrl, {
+      method: "POST",
+      body: { ...values, phone_number: `+234${values.phone_number.slice(1)}` },
+    })
+    localStorage.setItem("mca-tch", token)
+    useState<UserContext>("user", () => user)
+    const tech = await useApi()<TechnicianContext>(`${getTechnicianUrl}${user.id}`)
+    useState<TechnicianContext>("technician", () => tech)
+    if (!tech.has_changed_password) {
+      useState<string>("password", () => values.password)
+    }
 
-  useToast.promise(res, {
-    loading: "Checking credentials...",
-    success: async ({ token, user }: LoginResponse) => {
-      localStorage.setItem("mca-tch", token)
-      useState<UserContext>("user", () => user)
-      const tech = await useApi()<TechnicianContext>(`${getTechnicianUrl}${user.id}`)
-      useState<TechnicianContext>("technician", () => tech)
+    const callback = route.query?.callback ? (route.query.callback as string) : "/app/dashboard"
+    await navigateTo(callback)
 
-      const callback = route.query?.callback ? (route.query.callback as string) : "/app/dashboard"
-      await navigateTo(callback)
-
-      isLoading.value = false
-      await new Promise((resolve) =>
-        setTimeout(() => {
-          resolve("")
-        }, 1000)
-      )
-      return welcomeBackMessage()
-    },
-    error: (error: any) => {
-      isLoading.value = false
-      return error as string
-    },
-    description: (arg: any) => {
-      return typeof arg === "string" ? "Ensure your phone number and password is correct." : ""
-    },
-  })
+    await new Promise((resolve) =>
+      setTimeout(() => {
+        resolve("")
+      }, 1000)
+    )
+    useToast.success(welcomeBackMessage())
+    window.location.reload()
+  } catch (error) {
+  } finally {
+    isLoading.value = false
+  }
 }
 </script>
 
