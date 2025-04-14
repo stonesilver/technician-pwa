@@ -102,7 +102,7 @@ watch(
         </div>
 
         <div class="mt-5 flex justify-between items-center gap-2">
-          <shared-badge :text="`${selectedPart?.damage_area ?? ''} damage || ${selectedPart?.damage_part}`" class="truncate p-[4px_12px]" />
+          <shared-badge :text="`${selectedPart?.damage_area ?? ''} damage || ${selectedPart?.damage_part}`" class="p-[4px_12px]" />
           <Button
             variant="ghost"
             type="button"

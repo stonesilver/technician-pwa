@@ -22,6 +22,7 @@ defineEmits<{ (e: "view-more"): void }>()
       <shared-list-item
         :label="columnOne?.label"
         :value="columnOne?.value"
+        class="flex-1"
         :label-class="cn('text-gray-800 font-medium text-sm', columnOne?.labelClass)"
         :value-class="cn('text-gray-500 text-sm font-normal mt-1', columnOne?.valueClass)"
       />
@@ -29,6 +30,7 @@ defineEmits<{ (e: "view-more"): void }>()
       <shared-list-item
         :label="columnTwo?.label"
         :value="columnTwo?.value"
+        class="flex-1"
         :label-class="cn('text-mca font-medium text-sm text-right', columnTwo?.labelClass)"
         :value-class="cn('text-gray-500 text-sm font-normal text-right mt-1', columnTwo?.valueClass)"
       />

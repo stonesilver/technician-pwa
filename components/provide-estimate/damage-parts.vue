@@ -168,7 +168,7 @@ const {
         <p class="text-gray-700 text-base text-center">
           <span class="block">We understand you may not have repair estimate for this damage at the moment</span>
           <span class="block mt-4">
-            <span class="text-warning-500">Note :</span> Kindly submit this within the next <span class="text-mca">8hours</span>.
+            <span class="text-warning-500">Note :</span> Kindly submit this within the next <span class="text-mca">24hours</span>.
           </span>
         </p>
 
